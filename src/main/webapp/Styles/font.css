@@ -1,0 +1,29 @@
+@font-face {
+    font-family: 'jetbrainsMono-SemiBold';
+    src: url('../assets/fonts/ttf/JetBrainsMono-SemiBold.ttf') format('truetype'),
+    url('../assets/fonts/webfonts/JetBrainsMono-SemiBold.woff2') format('woff');
+}
+
+@font-face {
+    font-family: 'jetbrainsMono-Medium';
+    src: url('../assets/fonts/ttf/JetBrainsMono-Medium.ttf') format('truetype'),
+    url('../assets/fonts/webfonts/JetBrainsMono-Medium.woff2') format('woff');
+}
+
+@font-face {
+    font-family: 'jetbrainsMono-MediumItalic';
+    src: url('../assets/fonts/ttf/JetBrainsMono-MediumItalic.ttf') format('truetype'),
+    url('../assets/fonts/webfonts/JetBrainsMono-MediumItalic.woff2') format('woff');
+}
+
+@font-face {
+    font-family: 'jetbrainsMono-SemiBoldItalic';
+    src: url('../assets/fonts/ttf/JetBrainsMono-SemiBoldItalic.ttf') format('truetype'),
+    url('../assets/fonts/webfonts/JetBrainsMono-SemiBoldItalic.woff2') format('woff');
+}
+
+@font-face {
+    font-family: 'jetbrainsMono-MediumItalic';
+    src: url('../assets/fonts/ttf/JetBrainsMono-MediumItalic.ttf') format('truetype'),
+    url('../assets/fonts/webfonts/JetBrainsMono-MediumItalic.woff2') format('woff');
+}
