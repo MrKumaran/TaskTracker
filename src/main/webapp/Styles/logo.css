@@ -1,0 +1,13 @@
+.insideStroke {
+    fill: #0C6FFF;
+}
+
+.outsideStroke {
+    fill: #000000;
+}
+
+@media (prefers-color-scheme: dark) {
+    .outsideStroke {
+        fill: #ffffff;
+    }
+}
