@@ -1,0 +1,27 @@
+@import "font.css";
+
+:root {
+    font-family: 'jetbrainsMono-SemiBold', monospace;
+}
+
+body {
+    width: 99.5vw;
+    height: 99.5vh;
+    color: black;
+    background-color: white;
+}
+
+.container {
+    display: block;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-items: center;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: black;
+        color: white;
+    }
+}
