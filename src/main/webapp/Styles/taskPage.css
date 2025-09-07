@@ -50,7 +50,7 @@ h1 {
     justify-items: center;
 }
 
-#new-task-btn {
+button {
     min-width: 150px;
     min-height: 40px;
     max-height: 40px;
@@ -64,8 +64,54 @@ h1 {
     padding: 0;
 }
 
-#new-task-btn:hover {
+button:hover {
     background-color: #1db554;
+}
+
+#new-task {
+    width: 60%;
+    height: 60%;
+    border: unset;
+    border-radius: 50px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+#new-task form {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#new-task form ul li {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 8px;
+    align-items: center;
+}
+
+#new-task form ul li label {
+    min-width: 200px;
+}
+
+#new-task form ul li input {
+    flex: 1;
+    min-width: 200px;
+    min-height: 20px;
+    border: unset;
+    background-color: whitesmoke;
+    padding: 5px;
+}
+
+#new-task form ul li:last-child {
+    margin-top: 24px;
+    justify-content: center;
+}
+
+#new-task::backdrop {
+    background-color: rgba(1, 1, 1, 0.5);
 }
 
 .tasks {
@@ -81,6 +127,7 @@ h1 {
 .task:hover {
     background-color: #e0e0e8;
 }
+
 h4 {
     float: left;
     flex: 1;
@@ -91,4 +138,13 @@ h3 {
 
 }
 
+.emptyTask {
+    display: flex;
+    align-items: center;
+}
 
+#suchempty {
+    object-fit: contain;
+    width: 500px;
+    height: 500px;
+}

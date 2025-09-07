@@ -69,8 +69,9 @@
                     </div>
                     <% }
             } else {%>
-                    <div>
-                        <h1>WOW! such empty!... add new task to track your life the way you want >< </h1>
+                    <div class="emptyTask">
+                        <img id="suchempty" src="../assets/cheems.png" alt="">
+                        <h1>WOW, such empty!...<br> add new task to track your life the way you want >< </h1>
                     </div>
                     <% }%>
                 </div>
