@@ -86,7 +86,7 @@ public class DBManager {
     // Authentication --
     public String loginViaMail(String mail, String password) {
         String query = "SELECT salt FROM authentication WHERE mail = ?";
-        String salt = null;
+        String salt;
         try(PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, mail);
             ResultSet rs =  ps.executeQuery();
