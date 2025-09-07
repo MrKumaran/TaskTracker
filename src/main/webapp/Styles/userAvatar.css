@@ -1,0 +1,16 @@
+#userAvatarId {
+    padding-left: 5px;
+    width: 50px;
+    height: 50px;
+}
+
+.userAvatar {
+    fill: black;
+}
+
+@media (prefers-color-scheme: dark) {
+    .userAvatar {
+        fill: white;
+    }
+
+}
