@@ -8,7 +8,7 @@
   <body>
     <div class="container">
         <div id="logoDiv">
-          <%@include file="../assets/Titlelogo.svg"%>
+          <%@include file="../assets/titleLogo.svg"%>
           <h1>Task Tracker</h1>
         </div>
       <div class="content">

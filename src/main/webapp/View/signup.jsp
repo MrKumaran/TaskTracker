@@ -9,7 +9,7 @@
 <div class="container">
     <div class="column c1">
             <span>
-                <%@include file="../assets/Titlelogo.svg" %>
+                <%@include file="../assets/titleLogo.svg" %>
                 <h1>Task Tracker</h1>
             </span>
     </div>
