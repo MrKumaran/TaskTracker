@@ -52,7 +52,11 @@ public class Home extends HttpServlet {
                 if (task == null) isInserted = false;
                 else isInserted = dbManager.addTask(task);
                 response.setContentType("application/json");
-                response.getWriter().write("{\"status\": " + isInserted + "}");
+                String responseJSON = "{\"status\": " + isInserted + "}";
+                System.out.println(responseJSON);
+                response.getWriter().write(responseJSON);
+                request.setAttribute("isInserted" ,isInserted);
+//                request.getRequestDispatcher("/").forward(request, response);
             }
         }
     }
