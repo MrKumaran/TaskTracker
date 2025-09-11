@@ -8,6 +8,7 @@ public class Task {
     private String task_title;
     private LocalDateTime due;
     private boolean isDone;
+    private LocalDateTime completedAt;
 
     public String getUser_id() {
         return user_id;
@@ -49,6 +50,14 @@ public class Task {
         isDone = done;
     }
 
+    public LocalDateTime getCompletedAt() {
+        return completedAt;
+    }
+
+    public void setCompletedAt(LocalDateTime completedAt) {
+        this.completedAt = completedAt;
+    }
+
     @Override
     public String toString(){
         return "\nTask {" +
@@ -57,7 +66,7 @@ public class Task {
                 "\ntask_title: " + task_title +
                 "\ndue: " + due +
                 "\nIsDone: " + isDone +
+                "\nCompleted At: " + completedAt +
                 "\n};";
     }
-
 }

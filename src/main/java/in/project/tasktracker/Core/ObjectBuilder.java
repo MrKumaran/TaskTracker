@@ -33,6 +33,7 @@ public class ObjectBuilder {
         }
         task.setDue(due);
         task.setDone(false);
+        task.setCompletedAt(null);
         return task;
     }
 

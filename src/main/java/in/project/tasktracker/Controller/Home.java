@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.List;
 
 @WebServlet(name = "Home", value = {"/", "/profile"})
 public class Home extends HttpServlet {
@@ -31,7 +33,9 @@ public class Home extends HttpServlet {
             User user = dbManager.retrieveUser((String) session.getAttribute("user"));
             request.setAttribute("user", user);
             if (path.equals("/")) {
-                request.setAttribute("tasks", dbManager.retrieveUsersTasks(user.getUser_id()));
+                String taskType = request.getParameter("taskType");
+                List<Task> tasks = dbManager.retrieveUsersTasks(user.getUser_id());
+                request.setAttribute("tasks", tasks);
                 request.getRequestDispatcher("View/taskPage.jsp").forward(request, response);
             } else if (path.equals("/profile")) {
                 request.getRequestDispatcher("View/index.jsp").forward(request, response);
@@ -53,9 +57,8 @@ public class Home extends HttpServlet {
                 else isInserted = dbManager.addTask(task);
                 response.setContentType("application/json");
                 String responseJSON = "{\"status\": " + isInserted + "}";
-                System.out.println(responseJSON);
                 response.getWriter().write(responseJSON);
-                request.setAttribute("isInserted" ,isInserted);
+//                request.setAttribute("isInserted" ,isInserted);
 //                request.getRequestDispatcher("/").forward(request, response);
             }
         }

@@ -31,7 +31,7 @@ public class DBManager {
 
     public List<Task> retrieveUsersTasks(String user_id) {
         List<Task> tasks = new ArrayList<>();
-        String query = "SELECT user_id, task_id, task_title, due, isDone FROM task WHERE user_id = ?";
+        String query = "SELECT user_id, task_id, task_title, due, isDone, completedAt FROM task WHERE isDone = 'false' AND user_id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)){
             ps.setString(1, user_id);
             ResultSet rs = ps.executeQuery();
@@ -46,6 +46,12 @@ public class DBManager {
                         )
                 );
                 task.setDone(rs.getBoolean("isDone"));
+                String completedAt = rs.getString("completedAt");
+                task.setCompletedAt( completedAt==null?null:
+                        LocalDateTime.parse(
+                            completedAt.replace(" ", "T")
+                        )
+                );
                 tasks.add(task);
             }
             con.commit();
@@ -61,14 +67,15 @@ public class DBManager {
     }
 
     public boolean addTask(Task task) {
-        String query = "INSERT INTO task(user_id, task_id, task_title, due, isDone) VALUES" +
-                "(?,?,?,?,?)";
+        String query = "INSERT INTO task(user_id, task_id, task_title, due, isDone, completedAt) VALUES" +
+                "(?,?,?,?,?,?)";
         try(PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, task.getUser_id());
             ps.setString(2, task.getTask_id());
             ps.setString(3, task.getTask_title());
             ps.setTimestamp(4,Timestamp.valueOf(task.getDue()));
             ps.setBoolean(5, task.isDone());
+            ps.setTimestamp(6, task.getCompletedAt()!=null?Timestamp.valueOf(task.getCompletedAt()):null);
             ps.executeUpdate();
             con.commit();
         } catch (SQLException e) {

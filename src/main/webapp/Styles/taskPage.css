@@ -9,6 +9,7 @@
     margin: 2rem;
 }
 
+/* --- Top bar --- */
 .top-bar {
     display: flex;
     width: 90%;
@@ -45,9 +46,16 @@ h1 {
     padding-right: 4px;
 }
 
+/* --- Body element starts --- */
 #status {
     display: grid;
     justify-items: center;
+    gap: unset;
+}
+
+#status p {
+    margin-top: 6px;
+    margin-bottom: 6px;
 }
 
 button {
@@ -60,7 +68,7 @@ button {
     font-weight: bolder;
     font-size: large;
     border: unset;
-    margin: 0;
+    margin: 8px;
     padding: 0;
 }
 
@@ -111,31 +119,38 @@ button:hover {
 }
 
 #new-task::backdrop {
-    background-color: rgba(1, 1, 1, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
+/* tasks */
 .tasks {
+    margin-top: 8px;
+    margin-bottom: 8px;
     border-radius: 12px;
+    width: 70vw;
+    background-color: rgba(239, 238, 238, 0.78);
 }
 
 .task {
     display: flex;
-    padding: 10px;
-    border-radius: 20px;
+    border-radius: 10px;
+    width: 100%;
+    align-items: center;
 }
 
 .task:hover {
-    background-color: #e0e0e8;
+    background-color: #ffffff;
 }
 
 h4 {
     float: left;
+    padding-left:40px;
     flex: 1;
-    min-width: 200px;
 }
 
 h3 {
-
+    float: right;
+    padding-right:40px;
 }
 
 .emptyTask {
@@ -143,8 +158,83 @@ h3 {
     align-items: center;
 }
 
-#suchempty {
+#such-empty {
     object-fit: contain;
     width: 500px;
     height: 500px;
+}
+
+/* circle for check box */
+.custom-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.circle {
+    margin: 8px 8px 8px 16px;
+}
+
+.custom-checkbox .circle {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    background-color: #fff;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .circle {
+    background-color: #4CAF50;
+    border-color: #4CAF50;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    width: 10px;
+    height: 10px;
+    background-color: #1caa4f;
+    border-radius: 50%;
+    opacity: 1;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.custom-checkbox .circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 10px;
+    height: 10px;
+    background-color: #ffffff;
+    border-radius: 50%;
+    opacity: 0;
+    transition: transform 0.3s ease-in, opacity 0.3s ease-in;
+}
+
+@media (prefers-color-scheme: dark) {
+    .tasks {
+        background-color: #2e2d2d;
+    }
+
+    .task:hover {
+        background-color: #000000;
+    }
+
+    #new-task {
+        background-color: #2e2d2d;
+        color: white;
+    }
+
+    #new-task form ul li input {
+        flex: 1;
+        color: white;
+        background-color: black;
+    }
+
 }
