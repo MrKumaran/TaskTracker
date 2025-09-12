@@ -3,35 +3,35 @@ package in.project.tasktracker.Model;
 import java.time.LocalDateTime;
 
 public class Task {
-    private String user_id;
-    private String task_id;
-    private String task_title;
+    private String userId;
+    private String taskId;
+    private String taskTitle;
     private LocalDateTime due;
     private boolean isDone;
     private LocalDateTime completedAt;
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getTask_id() {
-        return task_id;
+    public String getTaskId() {
+        return taskId;
     }
 
-    public void setTask_id(String task_id) {
-        this.task_id = task_id;
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
     }
 
-    public String getTask_title() {
-        return task_title;
+    public String getTaskTitle() {
+        return taskTitle;
     }
 
-    public void setTask_title(String task_title) {
-        this.task_title = task_title;
+    public void setTaskTitle(String taskTitle) {
+        this.taskTitle = taskTitle;
     }
 
     public LocalDateTime getDue() {
@@ -61,9 +61,9 @@ public class Task {
     @Override
     public String toString(){
         return "\nTask {" +
-                "\nuser_id: " + user_id +
-                "\ntask_id: " + task_id +
-                "\ntask_title: " + task_title +
+                "\nuser_id: " + userId +
+                "\ntask_id: " + taskId +
+                "\ntask_title: " + taskTitle +
                 "\ndue: " + due +
                 "\nIsDone: " + isDone +
                 "\nCompleted At: " + completedAt +

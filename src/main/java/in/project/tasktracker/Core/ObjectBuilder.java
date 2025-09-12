@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class ObjectBuilder {
-    public static Task taskObjectBuilder(HttpServletRequest request, String user_id) {
+    public static Task taskObjectBuilder(HttpServletRequest request, String userId) {
         StringBuilder jsonStringBuilder = new StringBuilder();
         try (BufferedReader reader = request.getReader()) {
             String line;
@@ -23,9 +23,9 @@ public class ObjectBuilder {
         }
         JSONObject json = new JSONObject(jsonStringBuilder.toString());
         Task task = new Task();
-        task.setUser_id(user_id);
-        task.setTask_id(Authentication.generateUUID());
-        task.setTask_title(json.getString("new-task-title"));
+        task.setUserId(userId);
+        task.setTaskId(Authentication.generateUUID());
+        task.setTaskTitle(json.getString("new-task-title"));
         String dueParam = json.getString("new-task-due");
         LocalDateTime due = null;
         if (dueParam != null && !dueParam.isEmpty()) {
@@ -39,10 +39,10 @@ public class ObjectBuilder {
 
     public static User userObjectBuilder(HttpServletRequest request) {
         User user = new User();
-        user.setUser_id(Authentication.generateUUID());
+        user.setUserId(Authentication.generateUUID());
         user.setMail(request.getParameter("mail"));
         user.setUserName(request.getParameter("userName"));
-        user.setAvatar_url(request.getParameter("avatarUrl"));
+        user.setAvatarURL(request.getParameter("avatarUrl"));
         user.setSalt(Authentication.generateSalt());
         user.setPassword(Authentication.passwordHash(request.getParameter("password"), user.getSalt()));
         return user;

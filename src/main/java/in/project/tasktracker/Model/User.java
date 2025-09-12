@@ -1,19 +1,19 @@
 package in.project.tasktracker.Model;
 
 public class User {
-    private String user_id;
+    private String userId;
     private String mail;
     private String password;
     private String salt;
     private String userName;
-    private String avatar_url;
+    private String avatarURL;
 
-    public String getUser_id() {
-        return user_id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser_id(String user_id) {
-        this.user_id = user_id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getMail() {
@@ -48,11 +48,11 @@ public class User {
         this.userName = userName;
     }
 
-    public String getAvatar_url() {
-        return avatar_url;
+    public String getAvatarURL() {
+        return avatarURL;
     }
 
-    public void setAvatar_url(String avatar_url) {
-        this.avatar_url = avatar_url;
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
     }
 }

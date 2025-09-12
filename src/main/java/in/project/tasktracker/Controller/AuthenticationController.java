@@ -49,7 +49,7 @@ public class AuthenticationController extends HttpServlet {
         boolean isSignUp = dbManager.signupViaMail(user);
         if (isSignUp) {
             HttpSession session = request.getSession();
-            session.setAttribute("user", user.getUser_id());
+            session.setAttribute("user", user.getUserId());
             response.sendRedirect("/");
         }
         else request.getRequestDispatcher("View/signup.jsp").forward(request, response);
