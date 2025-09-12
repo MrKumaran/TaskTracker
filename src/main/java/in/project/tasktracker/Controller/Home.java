@@ -1,7 +1,6 @@
 package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
-import in.project.tasktracker.Core.ObjectBuilder;
 import in.project.tasktracker.Model.Task;
 import in.project.tasktracker.Model.User;
 import jakarta.servlet.ServletException;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.util.List;
 
 @WebServlet(name = "Home", value = {"/", "/profile"})
@@ -34,32 +32,11 @@ public class Home extends HttpServlet {
             request.setAttribute("user", user);
             if (path.equals("/")) {
                 String taskType = request.getParameter("taskType");
-                List<Task> tasks = dbManager.retrieveUsersTasks(user.getUser_id());
+                List<Task> tasks = dbManager.retrieveUsersTasks(user.getUserId());
                 request.setAttribute("tasks", tasks);
                 request.getRequestDispatcher("View/taskPage.jsp").forward(request, response);
             } else if (path.equals("/profile")) {
-                request.getRequestDispatcher("View/index.jsp").forward(request, response);
-            }
-        }
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        HttpSession session = request.getSession(false);
-        if (session == null){
-            response.sendRedirect("/landing");
-        } else {
-            String path = request.getServletPath();
-            User user = dbManager.retrieveUser((String) session.getAttribute("user"));
-            if (path.equals("/newTask")) {
-                boolean isInserted;
-                Task task = ObjectBuilder.taskObjectBuilder(request, user.getUser_id());
-                if (task == null) isInserted = false;
-                else isInserted = dbManager.addTask(task);
-                response.setContentType("application/json");
-                String responseJSON = "{\"status\": " + isInserted + "}";
-                response.getWriter().write(responseJSON);
-//                request.setAttribute("isInserted" ,isInserted);
-//                request.getRequestDispatcher("/").forward(request, response);
+                request.getRequestDispatcher("View/profile.jsp").forward(request, response);
             }
         }
     }
