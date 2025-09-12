@@ -31,15 +31,15 @@ public class DBManager {
 
     public List<Task> retrieveUsersTasks(String user_id) {
         List<Task> tasks = new ArrayList<>();
-        String query = "SELECT user_id, task_id, task_title, due, isDone, completedAt FROM task WHERE isDone = 'false' AND user_id = ?";
+        String query = "SELECT user_id, task_id, task_title, due, isDone, completedAt FROM task WHERE user_id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)){
             ps.setString(1, user_id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Task task = new Task();
-                task.setUser_id(user_id);
-                task.setTask_id(rs.getString("task_id"));
-                task.setTask_title(rs.getString("task_title"));
+                task.setUserId(user_id);
+                task.setTaskId(rs.getString("task_id"));
+                task.setTaskTitle(rs.getString("task_title"));
                 task.setDue(
                         LocalDateTime.parse(
                                 rs.getString("due").replace(" ", "T")
@@ -70,9 +70,9 @@ public class DBManager {
         String query = "INSERT INTO task(user_id, task_id, task_title, due, isDone, completedAt) VALUES" +
                 "(?,?,?,?,?,?)";
         try(PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setString(1, task.getUser_id());
-            ps.setString(2, task.getTask_id());
-            ps.setString(3, task.getTask_title());
+            ps.setString(1, task.getUserId());
+            ps.setString(2, task.getTaskId());
+            ps.setString(3, task.getTaskTitle());
             ps.setTimestamp(4,Timestamp.valueOf(task.getDue()));
             ps.setBoolean(5, task.isDone());
             ps.setTimestamp(6, task.getCompletedAt()!=null?Timestamp.valueOf(task.getCompletedAt()):null);
@@ -88,6 +88,26 @@ public class DBManager {
             return false;
         }
         return true;
+    }
+
+    public boolean updateCompletedTask(String userId, String taskId, boolean isDone) {
+        String query = "UPDATE task SET isDone = ?, completedAt = ? WHERE user_Id = ? AND task_Id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setBoolean(1, isDone);
+            ps.setTimestamp(2, (isDone)?Timestamp.valueOf(LocalDateTime.now()): null);
+            ps.setString(3, userId);
+            ps.setString(4, taskId);
+            con.commit();
+            return (ps.executeUpdate() == 1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                con.rollback();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+            return false;
+        }
     }
 
     // Authentication --
@@ -121,9 +141,9 @@ public class DBManager {
     public boolean signupViaMail(User user) {
         String query = "INSERT INTO profile(user_id, user_name, avatar_url) Values (?,?,?)";
         try(PreparedStatement ps = con.prepareStatement(query)){
-            ps.setString(1, user.getUser_id());
+            ps.setString(1, user.getUserId());
             ps.setString(2, user.getUserName());
-            ps.setString(3, user.getAvatar_url());
+            ps.setString(3, user.getAvatarURL());
             ps.executeUpdate();
         } catch (SQLException e) {
             try {
@@ -137,7 +157,7 @@ public class DBManager {
         }
         query = "INSERT INTO authentication(user_id, mail, password, salt) Values (?,?,?,?)";
         try(PreparedStatement ps = con.prepareStatement(query)){
-            ps.setString(1, user.getUser_id());
+            ps.setString(1, user.getUserId());
             ps.setString(2, user.getMail());
             ps.setString(3, user.getPassword());
             ps.setString(4, user.getSalt());
@@ -187,12 +207,12 @@ public class DBManager {
             ps.setString(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                user.setUser_id(userId);
+                user.setUserId(userId);
                 user.setMail(rs.getString("mail"));
                 user.setSalt(rs.getString("salt"));
                 user.setPassword(rs.getString("password"));
                 user.setUserName(rs.getString("user_name"));
-                user.setAvatar_url(rs.getString("avatar_url"));
+                user.setAvatarURL(rs.getString("avatar_url"));
             }
             else return null;
         } catch (SQLException e) {
