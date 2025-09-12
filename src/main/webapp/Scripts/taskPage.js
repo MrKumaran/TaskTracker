@@ -6,14 +6,35 @@ const myCheckbox = document.querySelectorAll(".task-checkbox")
 myCheckbox.forEach(
     checkBox => {
        checkBox.addEventListener("click", (e) => {
-               updateTaskStatus(e.target.value, e.target.checked)
+               updateTaskStatus(e)
            }
        )
 }
 )
 
-function updateTaskStatus(taskId, status) {
+function updateTaskStatus(e) {
+    const taskId = e.target.value
+    const status = e.target.checked
     console.log("task: " + taskId + "; status: " + status) // TODO: write complete code to send data to backend
+    fetch('/updateTask', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'taskId=' + encodeURIComponent(taskId) + '&isDone=' + encodeURIComponent(status)
+        }
+    )
+        .then(res => res.json())
+        .then(data => {
+            if(data.status) {
+                alert("Update success");
+                e.target.checked = status
+            }
+            else { alert("Update failed"); }
+        })
+        .catch(error => {
+            alert('Error occurred:' +  error)
+        })
 }
 
 function newTask() {
@@ -41,7 +62,7 @@ function newTask() {
                 else { alert("Update failed"); }
             })
             .catch(error => {
-                console.error('Error:', error);
+                alert('Error occurred:' +  error)
             });
         newTaskForm.reset()
         newTaskDialog.close()

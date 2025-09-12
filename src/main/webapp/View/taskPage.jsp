@@ -28,15 +28,17 @@
             <%@include file="../assets/titleLogo.svg" %>
             <h1>Task Tracker</h1>
         </div>
-        <div class="user">
-            <p><%=user.getUserName()%>
-            </p>
-            <% if (user.getAvatar_url() == null || user.getAvatar_url().isEmpty()) { %>
-            <%@include file="../assets/userAvatar.svg" %>
-            <% } else { %>
-            <img src="<%=user.getAvatar_url()%>" alt="">
-            <% } %>
-        </div>
+        <a href="profile" target="_self">
+            <div class="user">
+                <p><%=user.getUserName()%>
+                </p>
+                <% if (user.getAvatarURL() == null || user.getAvatarURL().isEmpty()) { %>
+                <%@include file="../assets/userAvatar.svg" %>
+                <% } else { %>
+                <img src="<%=user.getAvatarURL()%>" alt="">
+                <% } %>
+            </div>
+        </a>
     </div>
     <div id="status">
         <%@include file="../assets/trackerLogo.svg" %>
@@ -69,47 +71,44 @@
     <div class="tasks">
         <%
             for (Task task : tasks) {
-                int hourDiff = task.getDue().getHour() - now.getHour();
-                int minDIff = task.getDue().getMinute() - now.getMinute();
                 String formatter = null;
                 boolean isToday = false;
-                boolean overdue = now.getYear() > task.getDue().getYear() || now.getMonthValue() > task.getDue().getMonthValue() || (now.getDayOfMonth() < task.getDue().getDayOfMonth());
-                String Time = Math.abs(hourDiff) + ":" + Math.abs(minDIff);
+                boolean overdue = !task.isDone() && (now.getYear() > task.getDue().getYear() || (now.getMonthValue() >= task.getDue().getMonthValue()) && (now.getDayOfMonth() > task.getDue().getDayOfMonth()));
+                String timeLeft = null;
                 if (now.getMonthValue() == task.getDue().getMonthValue() && now.getDayOfMonth() == task.getDue().getDayOfMonth() && now.getYear() == task.getDue().getYear()) { // today
                     isToday = true;
+                    timeLeft = Math.abs(task.getDue().getHour() - now.getHour()) + ":" + Math.abs(task.getDue().getMinute() - now.getMinute());
                 } else if (now.getYear() == task.getDue().getYear()) { // same year
                     formatter = "HH:mm dd-MM";
                 } else { // diff year
                     formatter = "HH:mm dd-MM-yyyy";
                 }
-                if (overdue) {
+                if (!overdue) {
         %>
-        <div class="task" id="<%=task.getTask_id()%>">
-            <p style="display: none"><%=task.getTask_id()%>
-            </p>
+        <div class="task" id="<%=task.getTaskId()%>">
             <label class="custom-checkbox">
-                <input type="checkbox" class="task-checkbox" value="<%=task.getTask_id()%>">
+                <input type="checkbox" class="task-checkbox" value="<%=task.getTaskId()%>" <%=task.isDone() ? "checked" : ""%>>
                 <span class="circle"></span>
             </label>
-            <h4><%= task.getTask_title() %>
+            <h4><%= task.getTaskTitle() %>
             </h4>
             <h3>
-                <%= isToday ? "<span style=\"font-weight:bold;\">Time left: </span> <span style=\"color:red\">" + Time + "</span>"
+                <%= isToday ? "<span style=\"font-weight:bold;\">Time left: </span> <span style=\"color:red\">" + timeLeft + "</span>"
                         : task.getDue().format(DateTimeFormatter.ofPattern(formatter))
                 %>
             </h3>
         </div>
         <% } else { %>
-        <div class="task" style="color: #ba5656" id="<%=task.getTask_id()%>">
+        <div class="task" style="color: #ba5656" id="<%=task.getTaskId()%>">
             <label class="custom-checkbox">
-                <input type="checkbox" class="task-checkbox" value="<%=task.getTask_id()%>">
+                <input type="checkbox" class="task-checkbox" value="<%=task.getTaskId()%>">
                 <span class="circle"></span>
             </label>
-            <h4><%= task.getTask_title() %>
+            <h4><%= task.getTaskTitle() %>
             </h4>
             <h3>
                 <%= isToday ?
-                        "<span style=\"font-weight:bold;\">After target time: </span> <span style=\"color:red\">" + Time + "</span>"
+                        "<span style=\"font-weight:bold;\">After target time: </span> <span style=\"color:red\">" + timeLeft + "</span>"
                         : "<span style=\"font-weight:bold;\">Should've completed by: </span> <span style=\"color:red\">" + task.getDue().format(DateTimeFormatter.ofPattern(formatter)) + "</span>"
                 %>
             </h3>
