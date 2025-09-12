@@ -36,6 +36,11 @@ h1 {
     float: left;
 }
 
+a {
+    text-decoration: none;
+    color: black;
+}
+
 .user {
     display: flex;
     align-content: center;
@@ -235,6 +240,10 @@ h3 {
         flex: 1;
         color: white;
         background-color: black;
+    }
+
+    a {
+        color: white;
     }
 
 }
