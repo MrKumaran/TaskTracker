@@ -8,6 +8,10 @@
     fill: black;
 }
 
+.user:hover .userAvatar {
+    fill: #0C6FFF;
+}
+
 @media (prefers-color-scheme: dark) {
     .userAvatar {
         fill: white;

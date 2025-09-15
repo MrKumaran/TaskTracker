@@ -36,6 +36,10 @@ h1 {
     float: left;
 }
 
+.app-title:hover {
+    color: #0C6FFF;
+}
+
 a {
     text-decoration: none;
     color: black;
@@ -51,6 +55,10 @@ a {
     padding-right: 4px;
 }
 
+.user:hover {
+    color: #0C6FFF;
+}
+
 /* --- Body element starts --- */
 #status {
     display: grid;
@@ -64,10 +72,6 @@ a {
 }
 
 button {
-    min-width: 150px;
-    min-height: 40px;
-    max-height: 40px;
-    border-radius: 50px;
     background-color: #1cb954;
     color: white;
     font-weight: bolder;
@@ -75,10 +79,42 @@ button {
     border: unset;
     margin: 8px;
     padding: 0;
+    border-radius: 50px;
 }
 
 button:hover {
-    background-color: #1db554;
+    background-color: #1caa4f;
+}
+
+#new-task-btn {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    top: 85%;
+    left: 85%;
+    width: 60px;
+    height: 60px;
+    position: fixed;
+    z-index: 2;
+}
+
+#addIconVectorId {
+    width:32px;
+    height:32px;
+}
+
+.addIconVector {
+    stroke: white;
+}
+
+#new-task-btn:hover .addIconVector{
+    stroke: #0C6FFF;
+}
+
+#task-submit-btn {
+    min-width: 150px;
+    min-height: 40px;
+    max-height: 40px;
 }
 
 #new-task {
