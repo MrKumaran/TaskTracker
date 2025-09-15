@@ -57,11 +57,7 @@ public class DBManager {
             con.commit();
         }catch (SQLException e){
             e.printStackTrace();
-            try {
-                con.rollback();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+            rollBack();
         }
         return tasks;
     }
@@ -80,11 +76,7 @@ public class DBManager {
             con.commit();
         } catch (SQLException e) {
             e.printStackTrace();
-            try{
-                con.rollback();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+            rollBack();
             return false;
         }
         return true;
@@ -97,15 +89,27 @@ public class DBManager {
             ps.setTimestamp(2, (isDone)?Timestamp.valueOf(LocalDateTime.now()): null);
             ps.setString(3, userId);
             ps.setString(4, taskId);
+            boolean isUpdated = ps.executeUpdate() == 1;
             con.commit();
-            return (ps.executeUpdate() == 1);
+            return isUpdated;
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                con.rollback();
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+            rollBack();
+            return false;
+        }
+    }
+
+    public boolean deleteTask(String userId, String taskId) {
+        String query = "DELETE FROM task  WHERE user_id = ? AND task_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, userId);
+            ps.setString(2, taskId);
+            boolean isDeleted = ps.executeUpdate() == 1;
+            con.commit();
+            return isDeleted;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            rollBack();
             return false;
         }
     }
@@ -164,13 +168,8 @@ public class DBManager {
             ps.executeUpdate();
             con.commit();
         } catch (SQLException e) {
-            try {
-                con.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                return false;
-            }
             e.printStackTrace();
+            rollBack();
             return false;
         }
         return true;
@@ -185,12 +184,7 @@ public class DBManager {
             con.commit();
             return rs.next();
         } catch (SQLException e) {
-            try {
-                con.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                return false;
-            }
+            rollBack();
             e.printStackTrace();
             return false;
         }
@@ -214,18 +208,21 @@ public class DBManager {
                 user.setUserName(rs.getString("user_name"));
                 user.setAvatarURL(rs.getString("avatar_url"));
             }
-            else return null;
+            con.commit();
         } catch (SQLException e) {
-            try {
-                con.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                return null;
-            }
+            rollBack();
             e.printStackTrace();
             return null;
         }
         return user;
+    }
+
+    private void rollBack() {
+        try {
+            con.rollback();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }
