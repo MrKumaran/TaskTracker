@@ -132,7 +132,7 @@ button:hover {
     margin-top: 8px;
     margin-bottom: 8px;
     border-radius: 12px;
-    width: 70vw;
+    width: 80vw;
     background-color: rgba(239, 238, 238, 0.78);
 }
 
@@ -141,6 +141,7 @@ button:hover {
     border-radius: 10px;
     width: 100%;
     align-items: center;
+    margin-top: 4px;
 }
 
 .task:hover {
@@ -167,6 +168,42 @@ h3 {
     object-fit: contain;
     width: 500px;
     height: 500px;
+}
+
+.editOptions {
+    display: flex;
+    margin-right: 12px;
+}
+
+.editVector {
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+}
+
+.deleteVector {
+    width: 20px;
+    height: 22px;
+}
+
+.editVectorPencil {
+    stroke: black;
+}
+
+.editVectorOuter {
+    stroke: black;
+}
+
+.deleteVectorPath {
+    stroke: black;
+}
+
+.editVector:hover .editVectorPencil, .editVector:hover .editVectorOuter {
+    stroke: #0C6FFF;
+}
+
+.deleteVector:hover .deleteVectorPath {
+    stroke: red;
 }
 
 /* circle for check box */
@@ -244,6 +281,18 @@ h3 {
 
     a {
         color: white;
+    }
+
+    .editVectorPencil {
+        stroke: white;
+    }
+
+    .editVectorOuter {
+        stroke: white;
+    }
+
+    .deleteVectorPath {
+        stroke: white;
     }
 
 }

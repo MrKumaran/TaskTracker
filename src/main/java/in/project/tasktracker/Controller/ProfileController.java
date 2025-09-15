@@ -1,7 +1,6 @@
 package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
-import in.project.tasktracker.Model.Task;
 import in.project.tasktracker.Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -11,10 +10,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
-import java.util.List;
 
-@WebServlet(name = "Home", value = {"/", "/profile"})
-public class Home extends HttpServlet {
+@WebServlet(name = "ProfileController", value = {"/profile"})
+public class ProfileController extends HttpServlet {
     DBManager dbManager;
 
     public void init() {
@@ -23,21 +21,12 @@ public class Home extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-//        System.out.println(session);
         if (session == null) {
             response.sendRedirect("/landing");
         } else {
-            String path = request.getServletPath();
             User user = dbManager.retrieveUser((String) session.getAttribute("user"));
             request.setAttribute("user", user);
-            if (path.equals("/")) {
-                String taskType = request.getParameter("taskType");
-                List<Task> tasks = dbManager.retrieveUsersTasks(user.getUserId());
-                request.setAttribute("tasks", tasks);
-                request.getRequestDispatcher("View/taskPage.jsp").forward(request, response);
-            } else if (path.equals("/profile")) {
-                request.getRequestDispatcher("View/profile.jsp").forward(request, response);
-            }
+            request.getRequestDispatcher("View/profile.jsp").forward(request, response);
         }
     }
 

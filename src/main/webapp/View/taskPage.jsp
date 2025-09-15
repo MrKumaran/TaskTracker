@@ -73,7 +73,7 @@
             for (Task task : tasks) {
                 String formatter = null;
                 boolean isToday = false;
-                boolean overdue = !task.isDone() && (now.getYear() > task.getDue().getYear() || (now.getMonthValue() >= task.getDue().getMonthValue()) && (now.getDayOfMonth() > task.getDue().getDayOfMonth()));
+                boolean overdue = !task.isDone() && (now.isAfter(task.getDue()));
                 String timeLeft = null;
                 if (now.getMonthValue() == task.getDue().getMonthValue() && now.getDayOfMonth() == task.getDue().getDayOfMonth() && now.getYear() == task.getDue().getYear()) { // today
                     isToday = true;
@@ -83,41 +83,51 @@
                 } else { // diff year
                     formatter = "HH:mm dd-MM-yyyy";
                 }
-                if (!overdue) {
         %>
-        <div class="task" id="<%=task.getTaskId()%>">
+        <div class="task" id="<%=task.getTaskId()%>" <%= (overdue) ? "style=\"color: #ba5656\"" : "" %>>
             <label class="custom-checkbox">
-                <input type="checkbox" class="task-checkbox" value="<%=task.getTaskId()%>" <%=task.isDone() ? "checked" : ""%>>
+                <input type="checkbox" class="task-checkbox"
+                       value="<%=task.getTaskId()%>" <%=task.isDone() ? "checked" : ""%>>
                 <span class="circle"></span>
             </label>
             <h4><%= task.getTaskTitle() %>
             </h4>
             <h3>
-                <%= isToday ? "<span style=\"font-weight:bold;\">Time left: </span> <span style=\"color:red\">" + timeLeft + "</span>"
-                        : task.getDue().format(DateTimeFormatter.ofPattern(formatter))
+                <%= (overdue) ?
+                        (
+                                isToday ?
+                                        "<span style=\"font-weight:bold;\"> After target time: </span> " +
+                                                "<span style=\"color:red\">" + timeLeft + "</span>" :
+                                        "<span style=\"font-weight:bold;\">Should've completed by: </span> " +
+                                                "<span style=\"color:red\">" + task.getDue().format(DateTimeFormatter.ofPattern(formatter)) + "</span>"
+                        ) :
+                        (
+                                (task.isDone()) ?
+                                        (
+                                                "<span style=\"font-weight:bold;\">Completed At: </span> " +
+                                                        "<span style=\"color:green\">" + task.getCompletedAt().format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")) + "</span>"
+                                        )
+                                        : (
+                                        isToday ? "<span style=\"font-weight:bold;\">Time left:" +
+                                                " </span> " + timeLeft + "</span>" :
+                                                task.getDue().format(DateTimeFormatter.ofPattern(formatter))
+                                )
+                        )
                 %>
             </h3>
-        </div>
-        <% } else { %>
-        <div class="task" style="color: #ba5656" id="<%=task.getTaskId()%>">
-            <label class="custom-checkbox">
-                <input type="checkbox" class="task-checkbox" value="<%=task.getTaskId()%>">
-                <span class="circle"></span>
-            </label>
-            <h4><%= task.getTaskTitle() %>
-            </h4>
-            <h3>
-                <%= isToday ?
-                        "<span style=\"font-weight:bold;\">After target time: </span> <span style=\"color:red\">" + timeLeft + "</span>"
-                        : "<span style=\"font-weight:bold;\">Should've completed by: </span> <span style=\"color:red\">" + task.getDue().format(DateTimeFormatter.ofPattern(formatter)) + "</span>"
-                %>
-            </h3>
+            <div class="editOptions">
+                <div class="editTask" id="<%=task.getTaskId()%>">
+                    <%@include file="../assets/editVector.svg" %>
+                </div>
+                <div class="deleteTask" id="<%=task.getTaskId()%>">
+                    <%@include file="../assets/deleteVector.svg" %>
+                </div>
+            </div>
         </div>
         <%
-                }
-            } %>
-
-        <% } else {%>
+            }
+        } else {
+        %>
         <div class="emptyTask">
             <img id="such-empty" src="../assets/cheems.png" alt="">
             <h1>WOW, such empty!...<br> add new task to track your life the way you want >< </h1>

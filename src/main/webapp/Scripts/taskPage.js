@@ -1,39 +1,84 @@
 document.getElementById("new-task-btn").addEventListener("click", newTask)
 const newTaskDialog = document.getElementById("new-task")
-// const totalTask = document.getElementById("totalTask")
-// const completedTask = document.getElementById("completedTask")
 const myCheckbox = document.querySelectorAll(".task-checkbox")
+const editTaskVector = document.querySelectorAll(".editTask")
+const deleteTaskVector = document.querySelectorAll(".deleteTask")
+
+// attaching event listeners
 myCheckbox.forEach(
     checkBox => {
-       checkBox.addEventListener("click", (e) => {
-               updateTaskStatus(e)
-           }
-       )
-}
+        checkBox.addEventListener("click", (e) => {
+                updateTaskStatus(e)
+            }
+        )
+    }
 )
+
+editTaskVector.forEach(
+    edit => {
+        edit.addEventListener("click", (e) => {
+                editTask(e)
+            }
+        )
+    }
+)
+
+deleteTaskVector.forEach(
+    edit => {
+        edit.addEventListener("click", (e) => {
+                deleteTask(e)
+            }
+        )
+    }
+)
+
+function editTask(e) {
+    const taskId = e.currentTarget.getAttribute("id")
+    console.log("Edit Task Id: " + taskId)
+}
+
+function deleteTask(e) {
+    const taskId = e.currentTarget.getAttribute("id")
+    fetch('/deleteTask', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'taskId=' + encodeURIComponent(taskId)
+        }
+    ).then(res => {
+        if (res.ok) {
+            window.location.href = "/"
+        } else {
+            alert("Deleting task Failed, Try again :(")
+            window.location.href = "/"
+        }
+    })
+        .catch(error => {
+            alert('Error occurred:' + error)
+        })
+}
 
 function updateTaskStatus(e) {
     const taskId = e.target.value
     const status = e.target.checked
-    console.log("task: " + taskId + "; status: " + status) // TODO: write complete code to send data to backend
-    fetch('/updateTask', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'taskId=' + encodeURIComponent(taskId) + '&isDone=' + encodeURIComponent(status)
+    fetch('/updateTaskStatus', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'taskId=' + encodeURIComponent(taskId) + '&isDone=' + encodeURIComponent(status)
         }
-    )
-        .then(res => res.json())
-        .then(data => {
-            if(data.status) {
-                alert("Update success");
-                e.target.checked = status
-            }
-            else { alert("Update failed"); }
-        })
+    ).then(res => {
+        if (res.ok) {
+            window.location.href = "/"
+        } else {
+            alert("Updating task status Failed, Try again :(")
+            window.location.href = "/"
+        }
+    })
         .catch(error => {
-            alert('Error occurred:' +  error)
+            alert('Error occurred:' + error)
         })
 }
 
@@ -55,14 +100,16 @@ function newTask() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
+        }).then(res => {
+            if (res.ok) {
+                window.location.href = "/"
+            } else {
+                alert("Adding new task Failed, Try again :(")
+                window.location.href = "/"
+            }
         })
-            .then(res => res.json())
-            .then(data => {
-                if(data.status) { alert("Update success"); }
-                else { alert("Update failed"); }
-            })
             .catch(error => {
-                alert('Error occurred:' +  error)
+                alert('Error occurred:' + error)
             });
         newTaskForm.reset()
         newTaskDialog.close()
