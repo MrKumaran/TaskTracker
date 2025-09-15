@@ -25,9 +25,11 @@
 <div class="container">
     <div class="top-bar">
         <div class="app-title">
-            <%@include file="../assets/titleLogo.svg" %>
-            <h1>Task Tracker</h1>
-        </div>
+            <a href="" target="_self" class="app-title">
+                <%@include file="../assets/titleLogo.svg" %>
+                <h1>Task Tracker</h1>
+            </a>
+    </div>
         <a href="profile" target="_self">
             <div class="user">
                 <p><%=user.getUserName()%>
@@ -46,7 +48,7 @@
         </p>
         <p id="completedTask">Task Completed:<span style="color: #1cb954;"> <%=taskDoneCount%></span></p>
     </div>
-    <button id="new-task-btn">Add new task</button>
+    <button id="new-task-btn"><%@include file="../assets/addIcon.svg"%></button>
     <dialog id="new-task">
         <form id="new-task-form" method="post">
             <ul>
