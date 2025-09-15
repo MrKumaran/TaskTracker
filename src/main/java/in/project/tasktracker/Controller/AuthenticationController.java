@@ -49,6 +49,7 @@ public class AuthenticationController extends HttpServlet {
         boolean isSignUp = dbManager.signupViaMail(user);
         if (isSignUp) {
             HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(600);
             session.setAttribute("user", user.getUserId());
             response.sendRedirect("/");
         }
@@ -67,7 +68,7 @@ public class AuthenticationController extends HttpServlet {
         );
         if (userId != null){
             HttpSession session = request.getSession();
-            session.getId();
+            session.setMaxInactiveInterval(600);
             session.setAttribute("user", userId);
             response.sendRedirect("/");
         }
