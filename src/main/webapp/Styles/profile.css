@@ -83,7 +83,7 @@ a:hover {
 
 #backHref:hover {
     background-color: unset;
-    box-shadow: 0 0 15px rgb(12, 111, 255);
+    box-shadow: 0 0 15px rgb(12, 111, 255, 1);
 }
 
 .redirects {
