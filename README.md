@@ -31,15 +31,15 @@ for data in transit, Server Side Rendering Web Application.
 
 ### Want to Run this Locally? here step to follow:
 #### Requirements:
-Java SDK 21  
+Java 21  
 MySql 8.4  
 Tomcat 10.1.46  
 IDE of your choice (IntelliJ Idea highly recommended) IDE is for development purpose only  
-Git - optiona, can download whole repo [here](https://github.com/MrKumaran/TaskTracker/archive/refs/heads/main.zip) as zip if not git  
+Git - optional, can download whole repo [here](https://github.com/MrKumaran/TaskTracker/archive/refs/heads/main.zip) as zip if not git  
 
 > [!NOTE]
-> Developed using Java 21, MySql 8.4, Tomcat 10.1.46 but upon my knowledge I didn't use any version specific methods. So, previous(1 or 2) version may work dependency error may occur,
-> only checked for Java 21, MySql 8.4, Tomcat 10.1.46 for plug and play experience use recommended versions for all
+> Developed using Java openJDK 21, MySql 8.4, Tomcat 10.1.46 but upon my knowledge I didn't use any version specific methods. So, previous(1 or 2) version may work dependency error may occur,
+> only checked for Java openJDK 21, MySql 8.4, Tomcat 10.1.46 for plug and play experience use recommended versions for all
 
 If you want to run on server not development, generate War and copy files into tomcat directory and start Tomcat server, [Refer this](https://www.baeldung.com/tomcat-deploy-war)   
 Config [this](src/main/webapp/META-INF/context.xml) xml with DB details and if you want your application to use HTTPS generate from authorized CA and put into Server.xml
