@@ -4,7 +4,6 @@ import in.project.tasktracker.Core.DBManager;
 import in.project.tasktracker.Core.ObjectBuilder;
 import in.project.tasktracker.Model.Profile;
 import in.project.tasktracker.Model.Task;
-import in.project.tasktracker.Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -30,7 +29,7 @@ public class TaskController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null) {
+        if (session == null || session.getAttribute("user") == null) {
             response.sendRedirect("/landing");
         } else {
             String path = request.getServletPath();
@@ -46,7 +45,7 @@ public class TaskController extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
-        if (session == null){
+        if (session == null || session.getAttribute("user") == null){
             response.sendRedirect("/landing");
         } else {
             String path = request.getServletPath();
