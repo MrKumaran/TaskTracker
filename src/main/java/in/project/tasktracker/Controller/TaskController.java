@@ -2,6 +2,7 @@ package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
 import in.project.tasktracker.Core.ObjectBuilder;
+import in.project.tasktracker.Model.Profile;
 import in.project.tasktracker.Model.Task;
 import in.project.tasktracker.Model.User;
 import jakarta.servlet.ServletException;
@@ -33,10 +34,10 @@ public class TaskController extends HttpServlet {
             response.sendRedirect("/landing");
         } else {
             String path = request.getServletPath();
-            User user = dbManager.retrieveUser((String) session.getAttribute("user"));
-            request.setAttribute("user", user);
+            Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
+            request.setAttribute("user", profile);
             if(path.equals("/")) {
-                List<Task> tasks = dbManager.retrieveUsersTasks(user.getUserId());
+                List<Task> tasks = dbManager.retrieveUsersTasks(profile.getUserId());
                 request.setAttribute("tasks", tasks);
                 request.getRequestDispatcher("View/taskPage.jsp").forward(request, response);
             }
@@ -50,18 +51,18 @@ public class TaskController extends HttpServlet {
         } else {
             String path = request.getServletPath();
             boolean isOperationSuccess = false;
-            User user = dbManager.retrieveUser((String) session.getAttribute("user"));
+            Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
             response.setContentType("application/json");
             switch (path) {
                 case "/newTask" -> {
-                    Task task = ObjectBuilder.taskObjectBuilder(request, user.getUserId());
+                    Task task = ObjectBuilder.taskObjectBuilder(request, profile.getUserId());
                     if (task != null) isOperationSuccess = dbManager.addTask(task);
                     session.setAttribute("code", 1);
                 }
                 case "/updateTaskStatus" -> {
                     try {
                         isOperationSuccess = dbManager.updateCompletedTask(
-                                user.getUserId(),
+                                profile.getUserId(),
                                 request.getParameter("taskId"),
                                 Boolean.parseBoolean(request.getParameter("isDone"))
                         );
@@ -71,7 +72,7 @@ public class TaskController extends HttpServlet {
                     session.setAttribute("code", 2);
                 }
                 case "/deleteTask" -> {
-                    isOperationSuccess = dbManager.deleteTask(user.getUserId(), request.getParameter("taskId"));
+                    isOperationSuccess = dbManager.deleteTask(profile.getUserId(), request.getParameter("taskId"));
                     session.setAttribute("code", 3);
                 }
             }

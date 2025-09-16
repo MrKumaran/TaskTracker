@@ -1,10 +1,10 @@
 <%@ page import="in.project.tasktracker.Model.Task" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="in.project.tasktracker.Model.User" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Comparator" %>
 <%@ page import="java.time.LocalDateTime" %>
+<%@ page import="in.project.tasktracker.Model.Profile" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -15,7 +15,7 @@
 </head>
 <body>
 <%
-    User user = (User) request.getAttribute("user");
+    Profile profile = (Profile) request.getAttribute("user");
     @SuppressWarnings("unchecked") List<Task> tasks = (List<Task>) request.getAttribute("tasks");
     if (tasks == null) tasks = new ArrayList<>();
     else tasks = tasks.stream().sorted(Comparator.comparing(Task::isDone).thenComparing(Task::getDue)).toList();
@@ -32,12 +32,12 @@
     </div>
         <a href="profile" target="_self">
             <div class="user">
-                <p><%=user.getUserName()%>
+                <p><%=profile.getUserName()%>
                 </p>
-                <% if (user.getAvatarURL() == null || user.getAvatarURL().isEmpty()) { %>
+                <% if (profile.getAvatarURL() == null || profile.getAvatarURL().isEmpty()) { %>
                 <%@include file="../assets/userAvatar.svg" %>
                 <% } else { %>
-                <img src="<%=user.getAvatarURL()%>" alt="">
+                <img src="<%=profile.getAvatarURL()%>" alt="">
                 <% } %>
             </div>
         </a>

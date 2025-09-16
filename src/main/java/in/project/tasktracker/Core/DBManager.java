@@ -1,5 +1,6 @@
 package in.project.tasktracker.Core;
 
+import in.project.tasktracker.Model.Profile;
 import in.project.tasktracker.Model.Task;
 import in.project.tasktracker.Model.User;
 
@@ -190,23 +191,21 @@ public class DBManager {
         }
     }
 
-    //used only for test purposes
-    public User retrieveUser(String userId) {
-        User user = new User();
+    // to get user profile
+    public Profile retrieveProfile(String userId) {
+        Profile profile = new Profile();
         String query =
-                "SELECT mail, password, salt, user_name, avatar_url " +
+                "SELECT mail, user_name, avatar_url " +
                 "FROM authentication a JOIN profile p USING(user_id)" +
                 " WHERE a.user_id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)){
             ps.setString(1, userId);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                user.setUserId(userId);
-                user.setMail(rs.getString("mail"));
-                user.setSalt(rs.getString("salt"));
-                user.setPassword(rs.getString("password"));
-                user.setUserName(rs.getString("user_name"));
-                user.setAvatarURL(rs.getString("avatar_url"));
+                profile.setUserId(userId);
+                profile.setMailId(rs.getString("mail"));
+                profile.setUserName(rs.getString("user_name"));
+                profile.setAvatarURL(rs.getString("avatar_url"));
             }
             con.commit();
         } catch (SQLException e) {
@@ -214,7 +213,7 @@ public class DBManager {
             e.printStackTrace();
             return null;
         }
-        return user;
+        return profile;
     }
 
     private void rollBack() {

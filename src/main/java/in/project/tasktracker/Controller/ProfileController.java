@@ -1,6 +1,7 @@
 package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
+import in.project.tasktracker.Model.Profile;
 import in.project.tasktracker.Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -24,8 +25,8 @@ public class ProfileController extends HttpServlet {
         if (session == null) {
             response.sendRedirect("/landing");
         } else {
-            User user = dbManager.retrieveUser((String) session.getAttribute("user"));
-            request.setAttribute("user", user);
+            Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
+            request.setAttribute("user", profile);
             request.getRequestDispatcher("View/profile.jsp").forward(request, response);
         }
     }

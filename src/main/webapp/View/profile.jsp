@@ -1,4 +1,4 @@
-<%@ page import="in.project.tasktracker.Model.User" %>
+<%@ page import="in.project.tasktracker.Model.Profile" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -7,14 +7,12 @@
 </head>
 <body>
 <%
-  User user = (User) request.getAttribute("user");
+  Profile profile = (Profile) request.getAttribute("user");
 %>
-<h1>UUID: <%= user.getUserId() %></h1>
-<p>Mail: <%= user.getMail() %></p>
-<p>Password: <%= user.getPassword() %></p>
-<p>salt: <%= user.getSalt() %></p>
-<p>UserName: <%= user.getUserName() %></p>
-<p>Avatar URL: <%= user.getAvatarURL() %></p>
+<h1>UUID: <%= profile.getUserId() %></h1>
+<p>Mail: <%= profile.getMailId() %></p>
+<p>UserName: <%= profile.getUserName() %></p>
+<p>Avatar URL: <%= profile.getAvatarURL() %></p>
 <p>Session id: <%= session.getId() %></p>
 </body>
 </html>
