@@ -1,0 +1,102 @@
+@import "logo.css";
+@import "userAvatar.css";
+@import "base.css";
+@import "font.css";
+
+#logo {
+    width: 75px;
+    height: 75px;
+}
+
+.app-title {
+    display: flex;
+    column-gap: 12px;
+    align-items: center;
+    margin-top: 4rem;
+    font-size: larger;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+}
+
+.body {
+    height: 50%;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.userAvatarDiv {
+    width: 150px;
+    height: 150px;
+    margin: 2rem;
+}
+
+#userAvatarId {
+    padding-left: 5px;
+    width: 125px;
+    height: 125px;
+}
+
+.userDetails {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    align-content: start;
+    padding: 2rem;
+    border-radius: 25px;
+    background-color: #dad9d9;
+}
+
+a {
+    min-width: 100px;
+    min-height: 50px;
+    text-decoration: none;
+    color: black;
+    border-radius: 25px;
+    border: 2px solid red;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    margin-top: 2rem;
+}
+
+a:hover {
+    box-shadow: 0 0 15px rgb(255, 0, 0, 1);
+}
+
+#app-title-id {
+    border: unset;
+}
+
+#app-title-id:hover {
+    background-color: unset;
+    box-shadow: unset;
+}
+
+#backHref {
+    border-color: #0C6FFF;
+}
+
+#backHref:hover {
+    background-color: unset;
+    box-shadow: 0 0 15px rgb(12, 111, 255);
+}
+
+.redirects {
+    display: flex;
+    column-gap: 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+    a {
+        color: white;
+    }
+
+    .userDetails {
+        background-color: #2e2d2d;
+    }
+}
