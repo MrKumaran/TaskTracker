@@ -35,7 +35,7 @@ Java SDK 21
 MySql 8.4  
 Tomcat 10.1.46  
 IDE of your choice (IntelliJ Idea highly recommended) IDE is for development purpose only  
-Git - optional can download whole repo [here](https://github.com/MrKumaran/TaskTracker/archive/refs/heads/main.zip) as zip is not git  
+Git - optiona, can download whole repo [here](https://github.com/MrKumaran/TaskTracker/archive/refs/heads/main.zip) as zip if not git  
 
 > [!NOTE]
 > Developed using Java 21, MySql 8.4, Tomcat 10.1.46 but upon my knowledge I didn't use any version specific methods. So, previous(1 or 2) version may work dependency error may occur,
