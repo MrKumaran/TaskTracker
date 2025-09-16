@@ -38,7 +38,7 @@ IDE of your choice (IntelliJ Idea highly recommended) IDE is for development pur
 Git - optional can download whole repo [here](https://github.com/MrKumaran/TaskTracker/archive/refs/heads/main.zip) as zip is not git  
 
 > [!NOTE]
-> Note: Developed using Java 21, MySql 8.4, Tomcat 10.1.46 but upon my knowledge I didn't use any version specific methods so previous(1 or 2) version may work dependency error may occur,
+> Developed using Java 21, MySql 8.4, Tomcat 10.1.46 but upon my knowledge I didn't use any version specific methods. So, previous(1 or 2) version may work dependency error may occur,
 > only checked for Java 21, MySql 8.4, Tomcat 10.1.46 for plug and play experience use recommended versions for all
 
 If you want to run on server not development generate War and copy files into tomcat directory and start Tomcat server  
