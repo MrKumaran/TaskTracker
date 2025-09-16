@@ -25,11 +25,11 @@
 <div class="container">
     <div class="top-bar">
         <div class="app-title">
-            <a href="" target="_self" class="app-title">
+            <a href="${pageContext.request.contextPath}/" target="_self" class="app-title" id="app-title-id">
                 <%@include file="../assets/titleLogo.svg" %>
                 <h1>Task Tracker</h1>
             </a>
-    </div>
+        </div>
         <a href="profile" target="_self">
             <div class="user">
                 <p><%=profile.getUserName()%>
@@ -48,7 +48,9 @@
         </p>
         <p id="completedTask">Task Completed:<span style="color: #1cb954;"> <%=taskDoneCount%></span></p>
     </div>
-    <button id="new-task-btn"><%@include file="../assets/addIcon.svg"%></button>
+    <button id="new-task-btn">
+        <%@include file="../assets/addIcon.svg" %>
+    </button>
     <dialog id="new-task">
         <form id="new-task-form" method="post">
             <ul>

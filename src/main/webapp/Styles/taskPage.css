@@ -33,11 +33,7 @@ h1 {
 .app-title {
     display: flex;
     flex: 1;
-    float: left;
-}
-
-.app-title:hover {
-    color: #0C6FFF;
+    justify-content: flex-start;
 }
 
 a {
@@ -45,10 +41,21 @@ a {
     color: black;
 }
 
+#app-title-id {
+    display: flex;
+    min-width: 220px;
+    flex: 0;
+}
+
+#app-title-id:hover {
+    color: #0C6FFF;
+}
+
 .user {
     display: flex;
     align-content: center;
     min-width: 200px;
+    justify-content: flex-end;
 }
 
 .user p {
@@ -72,18 +79,19 @@ a {
 }
 
 button {
-    background-color: #1cb954;
-    color: white;
+    background-color: unset;
+    color: black;
     font-weight: bolder;
     font-size: large;
     border: unset;
     margin: 8px;
     padding: 0;
     border-radius: 50px;
+    border: 2px solid #1db554;
 }
 
 button:hover {
-    background-color: #1caa4f;
+    box-shadow: 0 0 15px rgb(28, 170, 79, 1);
 }
 
 #new-task-btn {
@@ -96,6 +104,7 @@ button:hover {
     height: 60px;
     position: fixed;
     z-index: 2;
+    background-color: unset;
 }
 
 #addIconVectorId {
@@ -104,11 +113,11 @@ button:hover {
 }
 
 .addIconVector {
-    stroke: white;
+    stroke: black;
 }
 
 #new-task-btn:hover .addIconVector{
-    stroke: #0C6FFF;
+    stroke: #1db554;
 }
 
 #task-submit-btn {
@@ -317,6 +326,14 @@ h3 {
 
     a {
         color: white;
+    }
+
+    button {
+        color: white;
+    }
+
+    .addIconVector {
+        stroke: white;
     }
 
     .editVectorPencil {
