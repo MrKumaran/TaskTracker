@@ -54,6 +54,8 @@ public class AuthenticationController extends HttpServlet {
             HttpSession session = request.getSession();
             session.setMaxInactiveInterval(600);
             session.setAttribute("user", user.getUserId());
+            session.setAttribute("operation", "greets");
+            session.setAttribute("isOperationSuccess", user.getUserName());
             response.sendRedirect("/");
         }
         else {
@@ -71,6 +73,8 @@ public class AuthenticationController extends HttpServlet {
              HttpSession session = request.getSession();
              session.setMaxInactiveInterval(600);
              session.setAttribute("user", userId);
+             session.setAttribute("operation", "greets");
+             session.setAttribute("isOperationSuccess", dbManager.retrieveProfile(userId).getUserName());
              response.sendRedirect("/");
          }
         else {

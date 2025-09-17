@@ -3,6 +3,9 @@ const newTaskDialog = document.getElementById("new-task")
 const myCheckbox = document.querySelectorAll(".task-checkbox")
 const editTaskVector = document.querySelectorAll(".editTask")
 const deleteTaskVector = document.querySelectorAll(".deleteTask")
+let update = document.getElementById("sideNotification").innerText
+console.log(update)
+update = update.split(",")
 
 // attaching event listeners
 myCheckbox.forEach(
@@ -12,7 +15,7 @@ myCheckbox.forEach(
             }
         )
     }
-)
+    )
 
 editTaskVector.forEach(
     edit => {
@@ -21,7 +24,7 @@ editTaskVector.forEach(
             }
         )
     }
-)
+    )
 
 deleteTaskVector.forEach(
     edit => {
@@ -30,7 +33,52 @@ deleteTaskVector.forEach(
             }
         )
     }
-)
+    )
+
+let msg
+switch (update[0]) {
+    case "greets":
+        showNotification(`Welcome! ${update[1]}`, "true")
+        break
+    case "newTaskAdded":
+        msg = (update[1] === "true")? "New task added": "New task didn't added"
+        break
+    case "updatedTaskStatus":
+        msg = (update[1] === "true")? "Task status updated": "Task status didn't updated"
+        break
+    case "deletedTask":
+        msg = (update[1] === "true")? "Task deleted": "Task didn't deleted"
+        break
+}
+
+if(update[0] !== "greets" && update[0] !== "null") {
+    showNotification(msg, update[1])
+}
+
+function showNotification(message, type = "true") {
+    const notif = document.getElementById("sideNotification")
+
+    notif.textContent = message
+
+    notif.classList.remove("success", "fail", "hide")
+
+    if (type === "true") {
+        notif.classList.add("success")
+    } else if (type === "false") {
+        notif.classList.add("fail")
+    }
+
+    notif.classList.add("show")
+
+    setTimeout(() => {
+        notif.classList.add("hide")
+        setTimeout(() => {
+            notif.textContent = "";
+            notif.classList.remove("show", "success", "fail")
+        }, 600);
+    }, 3000)
+}
+
 
 function editTask(e) {
     const taskId = e.currentTarget.getAttribute("id")

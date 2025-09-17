@@ -21,8 +21,23 @@
     else tasks = tasks.stream().sorted(Comparator.comparing(Task::isDone).thenComparing(Task::getDue)).toList();
     int totalTask = tasks.size();
     long taskDoneCount = tasks.stream().filter(Task::isDone).count();
+    var operationSession = session.getAttribute("operation");
+    var operationStatusSession = session.getAttribute("isOperationSuccess");
+    String operation = null;
+    String operationStatus = null;
+    if (operationSession != null) {
+        operation = operationSession.toString();
+        session.removeAttribute("operation");
+    }
+    if (operationStatusSession != null) {
+        operationStatus = operationStatusSession.toString();
+        session.removeAttribute("isOperationSuccess");
+    }
 %>
 <div class="container">
+    <div id="sideNotification">
+        <%=operation%>,<%=operationStatus%>
+    </div>
     <div class="top-bar">
         <div class="app-title">
             <a href="${pageContext.request.contextPath}/" target="_self" class="app-title" id="app-title-id">
@@ -44,7 +59,8 @@
     </div>
     <div id="status">
         <%@include file="../assets/trackerLogo.svg" %>
-        <p id="totalTask">Total task: <%=totalTask%></p>
+        <p id="totalTask">Total task: <%=totalTask%>
+        </p>
         <p id="completedTask">Task Completed:<span style="color: #1cb954;"> <%=taskDoneCount%></span></p>
     </div>
     <button id="new-task-btn">
@@ -55,11 +71,11 @@
             <ul>
                 <li>
                     <label for="new-task-title">Task Title:</label>
-                    <input type="text" name="new-task-title" id="new-task-title"/>
+                    <input type="text" name="new-task-title" id="new-task-title" required/>
                 </li>
                 <li>
                     <label for="new-task-due">Task Due:</label>
-                    <input type="datetime-local" name="new-task-due" id="new-task-due"/>
+                    <input type="datetime-local" name="new-task-due" id="new-task-due" required/>
                 </li>
                 <li>
                     <button type="button" id="task-submit-btn">Submit</button>
@@ -97,24 +113,22 @@
             </h4>
             <h3>
                 <%= (overdue) ?
-                        (
-                                isToday ?
-                                        "<span style=\"font-weight:bold;\"> After target time: </span> " +
-                                                "<span style=\"color:red\">" + timeLeft + "</span>" :
-                                        "<span style=\"font-weight:bold;\">Should've completed by: </span> " +
-                                                "<span style=\"color:red\">" + task.getDue().format(DateTimeFormatter.ofPattern(formatter)) + "</span>"
+                        (isToday ?
+                                "<span style=\"font-weight:bold;\"> After target time: </span> " +
+                                        "<span style=\"color:red\">" + timeLeft + "</span>" :
+                                "<span style=\"font-weight:bold;\">Should've completed by: </span> " +
+                                        "<span style=\"color:red\">" + task.getDue().format(DateTimeFormatter.ofPattern(formatter)) + "</span>"
                         ) :
-                        (
-                                (task.isDone()) ?
-                                        (
-                                                "<span style=\"font-weight:bold;\">Completed At: </span> " +
-                                                        "<span style=\"color:green\">" + task.getCompletedAt().format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")) + "</span>"
-                                        )
-                                        : (
-                                        isToday ? "<span style=\"font-weight:bold;\">Time left:" +
-                                                " </span> " + timeLeft + "</span>" :
-                                                task.getDue().format(DateTimeFormatter.ofPattern(formatter))
+                        ((task.isDone()) ?
+                                (
+                                        "<span style=\"font-weight:bold;\">Completed At: </span> " +
+                                                "<span style=\"color:green\">" + task.getCompletedAt().format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")) + "</span>"
                                 )
+                                : (
+                                isToday ? "<span style=\"font-weight:bold;\">Time left:" +
+                                        " </span> " + timeLeft + "</span>" :
+                                        task.getDue().format(DateTimeFormatter.ofPattern(formatter))
+                        )
                         )
                 %>
             </h3>

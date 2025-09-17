@@ -9,6 +9,51 @@
     margin: 2rem;
 }
 
+#sideNotification {
+    position: fixed;
+    top: 20px;
+    right: -300px;
+    width: 280px;
+    padding: 15px;
+    background-color: white;
+    color: black;
+    font-family: sans-serif;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,1);
+    opacity: 0;
+    z-index: 4;
+    border-left: 6px solid;
+    border-bottom: 4px solid;
+}
+
+#sideNotification.success {
+    border-color: #4CAF50;
+    box-shadow: 0 0 12px rgba(76, 175, 80, 0.5);
+}
+
+#sideNotification.fail {
+    border-color: #f44336;
+    box-shadow: 0 0 12px rgba(244, 67, 54, 0.5);
+}
+
+@keyframes slideIn {
+    from { right: -300px; opacity: 0; }
+    to   { right: 20px;   opacity: 1; }
+}
+
+@keyframes slideOut {
+    from { right: 20px;   opacity: 1; }
+    to   { right: -300px; opacity: 0; }
+}
+
+#sideNotification.show {
+    animation: slideIn 0.6s forwards;
+}
+
+#sideNotification.hide {
+    animation: slideOut 0.6s forwards;
+}
+
 /* --- Top bar --- */
 .top-bar {
     display: flex;
@@ -91,7 +136,7 @@ button {
 }
 
 button:hover {
-    box-shadow: 0 0 15px rgb(28, 170, 79, 1);
+    box-shadow: 0 0 4px rgb(28, 170, 79, 1);
 }
 
 #new-task-btn {
@@ -346,6 +391,19 @@ h3 {
 
     .deleteVectorPath {
         stroke: white;
+    }
+
+    #sideNotification {
+        background-color: black;
+        color: white;
+    }
+
+    input[type="datetime-local"] {
+        color-scheme: dark;
+    }
+
+    button:hover {
+        box-shadow: 0 0 12px rgb(28, 170, 79, 1);
     }
 
 }

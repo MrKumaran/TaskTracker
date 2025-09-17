@@ -49,9 +49,11 @@ public class TaskController extends HttpServlet {
             case "/newTask" -> {
                 Task task = ObjectBuilder.taskObjectBuilder(request, profile.getUserId());
                 if (task != null) isOperationSuccess = dbManager.addTask(task);
-                session.setAttribute("code", 1);
+                session.setAttribute("operation", "newTaskAdded");
             }
             case "/updateTaskStatus" -> {
+                // TODO: change logic
+                // instead of this use response and js to handle update don't rebuild entire page for small status update
                 try {
                     isOperationSuccess = dbManager.updateCompletedTask(
                             profile.getUserId(),
@@ -61,11 +63,11 @@ public class TaskController extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                session.setAttribute("code", 2);
+                session.setAttribute("operation", "updatedTaskStatus");
             }
             case "/deleteTask" -> {
                 isOperationSuccess = dbManager.deleteTask(profile.getUserId(), request.getParameter("taskId"));
-                session.setAttribute("code", 3);
+                session.setAttribute("operation", "deletedTask");
             }
         }
         session.setAttribute("isOperationSuccess", isOperationSuccess);
