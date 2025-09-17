@@ -9,7 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebFilter(
-        filterName = "AuthenticationFilter",
+        filterName = "AuthorizationFilter",
         urlPatterns = {
                 "/",
                 "/newTask",
@@ -19,13 +19,20 @@ import java.io.IOException;
                 "/logout"
         }
 )
-public class AuthenticationFilter implements Filter {
+public class AuthorizationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession(false);
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        // declaring no cache to make sure after logout, old page not rendering
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
+
         if (session == null || session.getAttribute("user") == null) {
-            ((HttpServletResponse) servletResponse).sendRedirect("/landing");
+            response.sendRedirect("/landing");
         } else {
             filterChain.doFilter(servletRequest, servletResponse);
         }

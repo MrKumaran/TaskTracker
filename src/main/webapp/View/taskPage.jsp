@@ -44,8 +44,7 @@
     </div>
     <div id="status">
         <%@include file="../assets/trackerLogo.svg" %>
-        <p id="totalTask">Total task: <%=totalTask%>
-        </p>
+        <p id="totalTask">Total task: <%=totalTask%></p>
         <p id="completedTask">Task Completed:<span style="color: #1cb954;"> <%=taskDoneCount%></span></p>
     </div>
     <button id="new-task-btn">

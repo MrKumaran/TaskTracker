@@ -4,6 +4,7 @@
 <head>
     <title>Task Tracker Login</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Styles/authPages.css" type="text/css">
+    <script src="../Scripts/errorIndication.js" defer></script>
 </head>
 <body>
 <div class="container">
@@ -15,6 +16,7 @@
     </div>
     <div class="column c2">
         <h2>Login</h2>
+        <div id="errorDiv" style="display: none; color: red"><%=request.getAttribute("error")%></div>
         <form id="authForm" action="login" method="post">
             <ul>
                 <li>

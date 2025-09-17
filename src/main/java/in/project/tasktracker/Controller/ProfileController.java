@@ -24,7 +24,7 @@ public class ProfileController extends HttpServlet {
         String path = request.getServletPath();
         if (path.equals("/logout")) {
             session.invalidate();
-            response.sendRedirect("/");
+            response.sendRedirect("/landing");
         } else if (path.equals("/profile")) {
             Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
             request.setAttribute("user", profile);

@@ -39,7 +39,10 @@ public class AuthenticationController extends HttpServlet {
     }
 
     private void signupHandler(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String mail = request.getParameter("mail");
+        // just here as placeholder for now
+        // later it will be replaced by email verification
+        // when I do, no need of this redirect
+         String mail = request.getParameter("mail");
         boolean isPresent = dbManager.isNewMail(mail);
         if (isPresent) {
             response.sendRedirect("/login");
@@ -53,25 +56,26 @@ public class AuthenticationController extends HttpServlet {
             session.setAttribute("user", user.getUserId());
             response.sendRedirect("/");
         }
-        else request.getRequestDispatcher("View/signup.jsp").forward(request, response);
+        else {
+            request.setAttribute("error", "errorCreatingAccount");
+            request.getRequestDispatcher("View/signup.jsp").forward(request, response);
+        }
     }
 
     private void loginHandler(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        boolean isPresent = dbManager.isNewMail(request.getParameter("mail"));
-        if (!isPresent) {
-            response.sendRedirect("/signup");
-            return;
+         String userId = dbManager.loginViaMail(
+                 request.getParameter("mail"),
+                 request.getParameter("password")
+         );
+         if (userId != null){
+             HttpSession session = request.getSession();
+             session.setMaxInactiveInterval(600);
+             session.setAttribute("user", userId);
+             response.sendRedirect("/");
+         }
+        else {
+            request.setAttribute("error", "credentialsNotMatch");
+            request.getRequestDispatcher("View/login.jsp").forward(request, response);
         }
-        String userId = dbManager.loginViaMail(
-                request.getParameter("mail"),
-                request.getParameter("password")
-        );
-        if (userId != null){
-            HttpSession session = request.getSession();
-            session.setMaxInactiveInterval(600);
-            session.setAttribute("user", userId);
-            response.sendRedirect("/");
-        }
-        else request.getRequestDispatcher("View/login.jsp").forward(request, response);
     }
 }

@@ -4,6 +4,7 @@
 <head>
     <title>Task Tracker boarding</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Styles/authPages.css" type="text/css">
+    <script src="../Scripts/errorIndication.js" defer></script>
 </head>
 <body>
 <div class="container">
@@ -38,7 +39,8 @@
                 </li>
             </ul>
         </form>
-        <a href="login"> Have an account? </a>
+        <div id="errorDiv" style="display: none; color: red"><%=request.getAttribute("error")%></div>
+        <a href="login" style="margin-top: 8px"> Have an account? </a>
     </div>
 </div>
 </body>
