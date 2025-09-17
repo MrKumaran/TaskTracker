@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet(name = "Authentication", value = {"/landing", "/login", "/signup"})
+@WebServlet(name = "AuthenticationController", value = {"/landing", "/login", "/signup"})
 public class AuthenticationController extends HttpServlet {
     DBManager dbManager;
 

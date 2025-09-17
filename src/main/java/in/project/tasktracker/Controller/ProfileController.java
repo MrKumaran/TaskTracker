@@ -21,19 +21,14 @@ public class ProfileController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session == null || session.getAttribute("user") == null) {
-            response.sendRedirect("/landing");
-        } else {
-            String path = request.getServletPath();
-            if(path.equals("/logout")) {
-                session.invalidate();
-                response.sendRedirect("/");
-            }
-            else if(path.equals("/profile")){
-                Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
-                request.setAttribute("user", profile);
-                request.getRequestDispatcher("View/profile.jsp").forward(request, response);
-            }
+        String path = request.getServletPath();
+        if (path.equals("/logout")) {
+            session.invalidate();
+            response.sendRedirect("/");
+        } else if (path.equals("/profile")) {
+            Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
+            request.setAttribute("user", profile);
+            request.getRequestDispatcher("View/profile.jsp").forward(request, response);
         }
     }
 
