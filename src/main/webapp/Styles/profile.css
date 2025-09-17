@@ -65,7 +65,7 @@ a {
 }
 
 a:hover {
-    box-shadow: 0 0 15px rgb(255, 0, 0, 1);
+    box-shadow: 0 0 4px rgb(255, 0, 0, 1);
 }
 
 #app-title-id {
@@ -83,7 +83,7 @@ a:hover {
 
 #backHref:hover {
     background-color: unset;
-    box-shadow: 0 0 15px rgb(12, 111, 255, 1);
+    box-shadow: 0 0 4px rgb(12, 111, 255, 1);
 }
 
 .redirects {
@@ -98,5 +98,13 @@ a:hover {
 
     .userDetails {
         background-color: #2e2d2d;
+    }
+
+    a:hover {
+        box-shadow: 0 0 16px rgb(255, 0, 0, 1);
+    }
+
+    #backHref:hover {
+        box-shadow: 0 0 16px rgb(12, 111, 255, 1);
     }
 }
