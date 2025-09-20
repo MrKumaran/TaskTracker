@@ -79,7 +79,6 @@ function showNotification(message, type = "true") {
     }, 3000)
 }
 
-
 function editTask(e) {
     const taskId = e.currentTarget.getAttribute("id")
     console.log("Edit Task Id: " + taskId)

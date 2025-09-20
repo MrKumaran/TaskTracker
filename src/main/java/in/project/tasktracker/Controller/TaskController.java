@@ -52,8 +52,6 @@ public class TaskController extends HttpServlet {
                 session.setAttribute("operation", "newTaskAdded");
             }
             case "/updateTaskStatus" -> {
-                // TODO: change logic
-                // instead of this use response and js to handle update don't rebuild entire page for small status update
                 try {
                     isOperationSuccess = dbManager.updateCompletedTask(
                             profile.getUserId(),
