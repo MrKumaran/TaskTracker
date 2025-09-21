@@ -44,7 +44,6 @@ public class TaskController extends HttpServlet {
         String path = request.getServletPath();
         boolean isOperationSuccess = false;
         Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
-        response.setContentType("application/json");
         switch (path) {
             case "/newTask" -> {
                 Task task = ObjectBuilder.taskObjectBuilder(request, profile.getUserId());
