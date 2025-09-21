@@ -31,6 +31,9 @@
             <div class="pic-options" id="picOptions">
                 <button id="viewPicBtn">View</button>
                 <button id="uploadPicBtn">Upload New</button>
+                <% if (!(profile.getAvatarURL() == null) && !profile.getAvatarURL().isEmpty()) { %>
+                <button id="removePicBtn">Remove</button>
+                <% } %>
                 <input type="file" id="uploadInput" style="display:none">
             </div>
         </div>

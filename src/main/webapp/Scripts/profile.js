@@ -5,6 +5,7 @@ const picOptions = document.getElementById("picOptions")
 const viewPicBtn = document.getElementById("viewPicBtn")
 const uploadPicBtn = document.getElementById("uploadPicBtn")
 const uploadInput = document.getElementById("uploadInput")
+const removePicBtn = document.getElementById("removePicBtn")
 
 // Toggle options menu on image click
 profilePicDiv.addEventListener("click", (e) => {
@@ -39,9 +40,9 @@ uploadInput.addEventListener("change", (e) => {
     if (file) {
         const formData = new FormData()
         formData.append('profilePic', file)
-        fetch('/api/upload-image', {
+        fetch('/upload-profile-pic', {
             method: 'POST',
-            body: formData,
+            body: formData
         })
             .then(response => response.json())
             .then(data => {
@@ -57,4 +58,26 @@ uploadInput.addEventListener("change", (e) => {
                 showNotification("Error uploading image", "false")
             })
     }
+})
+
+// deleting profile pic
+removePicBtn.addEventListener("click", () => {
+    fetch('/delete-profile-pic', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'mail=' + encodeURIComponent(document.getElementById('userMail').innerText)
+    }).then(res => {
+        if (res.ok) {
+            window.location.href = "/profile"
+        } else {
+            alert("Profile pic removing error :(")
+            window.location.href = "/profile"
+        }
+    })
+        .catch(error => {
+            alert('Error occurred:' + error)
+        })
+
 })

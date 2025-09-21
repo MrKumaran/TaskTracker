@@ -1,7 +1,5 @@
-package in.project.tasktracker.API;
+package in.project.tasktracker.Core;
 
-import in.project.tasktracker.Core.DBManager;
-import in.project.tasktracker.Core.ImageManager;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -14,7 +12,10 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
 // This servlet is responsible for maintaining images(profile images)
-@WebServlet(name = "ProfileImageUpdater", value = {"/api/upload-image"})
+@WebServlet(name = "ProfileImageUpdater", value = {
+        "/upload-profile-pic",
+        "/delete-profile-pic"
+})
 @MultipartConfig
 public class ProfileImageUpdater extends HttpServlet {
     private ImageManager imageManager;
@@ -32,7 +33,7 @@ public class ProfileImageUpdater extends HttpServlet {
         String userId = (String) session.getAttribute("user");
         response.setContentType("application/json");
         String path = request.getServletPath();
-        if(path.equals("/api/upload-image")) {
+        if(path.equals("/upload-profile-pic")) {
             try {
                 Part filePart = request.getPart("profilePic");
                 String filename = filePart.getSubmittedFileName();
@@ -75,8 +76,13 @@ public class ProfileImageUpdater extends HttpServlet {
                 e.printStackTrace();
                 returnNone(response);
             }
-        } else {
-            response.sendRedirect("/");
+        }
+        else if(path.equals("/delete-profile-pic")) {
+            String url = dbManager.retrieveProfile(userId).getAvatarURL();
+            if(url != null && !url.isEmpty()) {
+                imageManager.deleteOldImage(url);
+                dbManager.updateProfileUrl(null, userId);
+            }
         }
 
     }

@@ -18,7 +18,8 @@ import java.io.IOException;
                 "/deleteTask",
                 "/profile",
                 "/logout",
-                "/api/upload-image"
+                "/upload-profile-pic",
+                "/delete-profile-pic"
         }
 )
 public class AuthorizationFilter implements Filter {
