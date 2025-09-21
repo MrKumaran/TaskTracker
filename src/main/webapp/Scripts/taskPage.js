@@ -1,13 +1,22 @@
+import { showNotification } from './sideNotification.js'
+
 document.getElementById("new-task-btn").addEventListener("click", newTask)
 const newTaskDialog = document.getElementById("new-task")
 const myCheckbox = document.querySelectorAll(".task-checkbox")
 const editTaskVector = document.querySelectorAll(".editTask")
 const deleteTaskVector = document.querySelectorAll(".deleteTask")
 let update = document.getElementById("sideNotification").innerText
-console.log(update)
+const outsideEvent = document.getElementById("new-task")
 update = update.split(",")
 
 // attaching event listeners
+outsideEvent.addEventListener("click", (e) => {
+    console.log("Dialog outside click")
+    if(e.target === outsideEvent) {
+        newTaskDialog.close()
+    }
+})
+
 myCheckbox.forEach(
     checkBox => {
         checkBox.addEventListener("click", (e) => {
@@ -53,30 +62,6 @@ switch (update[0]) {
 
 if(update[0] !== "greets" && update[0] !== "null") {
     showNotification(msg, update[1])
-}
-
-function showNotification(message, type = "true") {
-    const notif = document.getElementById("sideNotification")
-
-    notif.textContent = message
-
-    notif.classList.remove("success", "fail", "hide")
-
-    if (type === "true") {
-        notif.classList.add("success")
-    } else if (type === "false") {
-        notif.classList.add("fail")
-    }
-
-    notif.classList.add("show")
-
-    setTimeout(() => {
-        notif.classList.add("hide")
-        setTimeout(() => {
-            notif.textContent = "";
-            notif.classList.remove("show", "success", "fail")
-        }, 600);
-    }, 3000)
 }
 
 function editTask(e) {
