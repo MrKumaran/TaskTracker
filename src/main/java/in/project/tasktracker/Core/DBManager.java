@@ -11,11 +11,12 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// This class is responsible for all DB operations
 public class DBManager {
     private static final DBManager INSTANCE = new DBManager();
     private Connection con;
 
-    public DBManager() {
+    private DBManager() {
         try{
             InitialContext context = new InitialContext();
             DataSource dataSource = (DataSource) context.lookup("java:comp/env/db/tasktracker");
@@ -30,6 +31,25 @@ public class DBManager {
         return INSTANCE;
     }
 
+    // profile url related operations --
+    // update new url for user
+    public boolean updateProfileUrl(String url, String userId) {
+        String query = "UPDATE profile SET avatar_url = ? WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, url);
+            ps.setString(2, userId);
+            boolean isUpdated = ps.executeUpdate() == 1;
+            con.commit();
+            return isUpdated;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            rollBack();
+            return false;
+        }
+    }
+
+    // Task related operations --
+    // Getting tasks for user
     public List<Task> retrieveUsersTasks(String user_id) {
         List<Task> tasks = new ArrayList<>();
         String query = "SELECT user_id, task_id, task_title, due, isDone, completedAt FROM task WHERE user_id = ?";
@@ -63,6 +83,7 @@ public class DBManager {
         return tasks;
     }
 
+    // Adding new task for user
     public boolean addTask(Task task) {
         String query = "INSERT INTO task(user_id, task_id, task_title, due, isDone, completedAt) VALUES" +
                 "(?,?,?,?,?,?)";
@@ -83,6 +104,7 @@ public class DBManager {
         return true;
     }
 
+    // updating task status
     public boolean updateCompletedTask(String userId, String taskId, boolean isDone) {
         String query = "UPDATE task SET isDone = ?, completedAt = ? WHERE user_Id = ? AND task_Id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)) {
@@ -100,6 +122,7 @@ public class DBManager {
         }
     }
 
+    // deleting task
     public boolean deleteTask(String userId, String taskId) {
         String query = "DELETE FROM task  WHERE user_id = ? AND task_id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)) {
@@ -115,7 +138,7 @@ public class DBManager {
         }
     }
 
-    // Authentication --
+    // Authentication related operations--
     public String loginViaMail(String mail, String password) {
         String query = "SELECT salt FROM authentication WHERE mail = ?";
         String salt;
@@ -191,7 +214,7 @@ public class DBManager {
         }
     }
 
-    // to get user profile
+    // to get user profile - also using this method for getting existing url
     public Profile retrieveProfile(String userId) {
         Profile profile = new Profile();
         String query =
@@ -216,6 +239,7 @@ public class DBManager {
         return profile;
     }
 
+    // common method to rollback db if error occurs
     private void rollBack() {
         try {
             con.rollback();
