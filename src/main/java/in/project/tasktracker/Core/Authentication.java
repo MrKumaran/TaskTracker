@@ -4,6 +4,7 @@ import java.security.MessageDigest;
 import java.util.Random;
 import java.util.UUID;
 
+// Helper class for generating new uuid, generating salf and hashing password
 public class Authentication {
     private final static int SALT_LENGTH = 10;
 

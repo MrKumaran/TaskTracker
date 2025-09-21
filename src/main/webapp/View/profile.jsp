@@ -5,6 +5,7 @@
 <head>
     <title>Task Tracker</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Styles/profile.css" type="text/css">
+    <script type="module" src="../Scripts/profile.js" defer></script>
 </head>
 <body>
 <%
@@ -17,13 +18,21 @@
             <h1>Task Tracker</h1>
         </a>
     </div>
+    <div id="sideNotification"></div>
     <div class="body">
         <div class="userAvatarDiv">
-            <% if (profile.getAvatarURL() == null || profile.getAvatarURL().isEmpty()) { %>
-            <%@include file="../assets/userAvatar.svg" %>
-            <% } else { %>
-            <img src="<%=profile.getAvatarURL()%>" alt="">
-            <% } %>
+            <div id="profilePicDiv">
+                <% if (profile.getAvatarURL() == null || profile.getAvatarURL().isEmpty()) { %>
+                <%@include file="../assets/userAvatar.svg" %>
+                <% } else { %>
+                <img src="<%=profile.getAvatarURL()%>" alt="" id="profilePic">
+                <% } %>
+            </div>
+            <div class="pic-options" id="picOptions">
+                <button id="viewPicBtn">View</button>
+                <button id="uploadPicBtn">Upload New</button>
+                <input type="file" id="uploadInput" style="display:none">
+            </div>
         </div>
         <div class="userDetails">
             <p>User Name: </p>

@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.util.Objects;
 
+// Filter to check about form submitted on signup
 @WebFilter(urlPatterns = {"/signup"})
 public class SignUpFilter implements Filter {
 

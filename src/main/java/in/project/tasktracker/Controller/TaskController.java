@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+// This servlet is responsible for managing all task related operations
 @WebServlet(name = "TaskController", value = {
         "/",
         "/newTask",
@@ -23,10 +24,12 @@ import java.util.List;
 public class TaskController extends HttpServlet {
     DBManager dbManager;
 
+    @Override
     public void init() {
         this.dbManager = DBManager.getInstance();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         String path = request.getServletPath();
@@ -39,12 +42,13 @@ public class TaskController extends HttpServlet {
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         String path = request.getServletPath();
         boolean isOperationSuccess = false;
         Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
-        response.setContentType("application/json");
+        response.setContentType("application/json"); // This is here to send response to JS, so that it will alert user about operation
         switch (path) {
             case "/newTask" -> {
                 Task task = ObjectBuilder.taskObjectBuilder(request, profile.getUserId());

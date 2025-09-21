@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+// Filter used to check if user is logged in
 @WebFilter(
         filterName = "AuthorizationFilter",
         urlPatterns = {
@@ -16,7 +17,8 @@ import java.io.IOException;
                 "/updateTaskStatus",
                 "/deleteTask",
                 "/profile",
-                "/logout"
+                "/logout",
+                "/api/upload-image"
         }
 )
 public class AuthorizationFilter implements Filter {

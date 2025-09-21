@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+// This servlet is responsible for authentication signing up new user, login in existing user
 @WebServlet(name = "AuthenticationController", value = {"/landing", "/login", "/signup"})
 public class AuthenticationController extends HttpServlet {
     DBManager dbManager;
@@ -42,7 +43,7 @@ public class AuthenticationController extends HttpServlet {
         // just here as placeholder for now
         // later it will be replaced by email verification
         // when I do, no need of this redirect
-         String mail = request.getParameter("mail");
+        String mail = request.getParameter("mail");
         boolean isPresent = dbManager.isNewMail(mail);
         if (isPresent) {
             response.sendRedirect("/login");

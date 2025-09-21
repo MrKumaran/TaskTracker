@@ -10,7 +10,7 @@
 <html>
 <head>
     <title>Tasks</title>
-    <script src="../Scripts/taskPage.js" defer></script>
+    <script type="module" src="../Scripts/taskPage.js" defer></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Styles/taskPage.css" type="text/css">
 </head>
 <body>
@@ -52,7 +52,7 @@
                 <% if (profile.getAvatarURL() == null || profile.getAvatarURL().isEmpty()) { %>
                 <%@include file="../assets/userAvatar.svg" %>
                 <% } else { %>
-                <img src="<%=profile.getAvatarURL()%>" alt="">
+                <img src="<%=profile.getAvatarURL()%>" alt="" id="profilePic">
                 <% } %>
             </div>
         </a>

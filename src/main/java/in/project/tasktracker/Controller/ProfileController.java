@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+// This servlet is responsible for profile related operation except profile image -> it was managed by API/ProfileImageUpdater.java
 @WebServlet(name = "ProfileController", value = {"/profile", "/logout"})
 public class ProfileController extends HttpServlet {
     DBManager dbManager;

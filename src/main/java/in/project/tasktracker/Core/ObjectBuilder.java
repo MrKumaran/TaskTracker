@@ -9,6 +9,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+// This class is responsible for building object
+// It builds object from request
 public class ObjectBuilder {
     public static Task taskObjectBuilder(HttpServletRequest request, String userId) {
         StringBuilder jsonStringBuilder = new StringBuilder();

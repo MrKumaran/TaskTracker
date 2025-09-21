@@ -11,6 +11,7 @@ Simply because I want to learn and try something using Tomcat, web developing, s
 **Web Page:** JSP  
 **Font:** [Jetbrains Mono](https://www.jetbrains.com/lp/mono/)  
 **DataBase:** [MySql 8.4](https://dev.mysql.com/doc/relnotes/mysql/8.4/en/)  
+**Cloud:** [Cloudinary](https://cloudinary.com/)  
 **IDE:** Of course! [Jetbrains IntelliJ Idea](https://www.jetbrains.com/idea/) <sub>Only Ultimate works for JSP</sub>  
 **Web Server/Servlet container:** [Tomcat 10.1.46](https://tomcat.apache.org/download-10.cgi)  
 
@@ -20,6 +21,7 @@ Simply because I want to learn and try something using Tomcat, web developing, s
 So, This is just another ordinary to do kinda app.  
 This is fully using HTTPS not HTTP configured in server.xml in conf dir of tomcat itself and generated tls certificate locally for encryption
 for data in transit, Server Side Rendering Web Application.
+Used cloudinary for managing image asset.
 
 ### Future of this project:
 -> Filter option  
