@@ -45,8 +45,13 @@ uploadInput.addEventListener("change", (e) => {
         })
             .then(response => response.json())
             .then(data => {
-                profilePicDiv.innerHTML = '<img src="' + data.fileName + '" alt="" id="profilePic"/>'
-                showNotification("Profile picture updated", "true")
+                if(data.status === 'success'){
+                    profilePicDiv.innerHTML = '<img src="' + data.fileName + '" alt="" id="profilePic"/>'
+                    showNotification("Profile picture updated", "true")
+                } else {
+                    showNotification("Error uploading image", "false")
+                }
+
             })
             .catch(error => {
                 showNotification("Error uploading image", "false")
