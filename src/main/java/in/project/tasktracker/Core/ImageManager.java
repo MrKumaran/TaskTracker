@@ -43,7 +43,9 @@ public class ImageManager {
                         .upload(path, ObjectUtils.emptyMap()).get("secure_url").toString();
     }
 
-    public void deleteOldImage(String publicId) throws IOException {
+    public void deleteOldImage(String url) throws IOException {
+        String[] urlParts = url.split("/");
+        String publicId = urlParts[urlParts.length-1].split("\\.")[0];
         cloudinary.uploader()
                 .destroy(publicId, ObjectUtils.asMap("invalidate", true));
     }
