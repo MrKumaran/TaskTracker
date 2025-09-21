@@ -38,7 +38,6 @@ uploadInput.addEventListener("change", (e) => {
     const file = e.target.files[0]
     if (file) {
         const formData = new FormData()
-        const reader = new FileReader()
         formData.append('profilePic', file)
         fetch('/api/upload-image', {
             method: 'POST',
