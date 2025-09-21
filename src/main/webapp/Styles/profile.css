@@ -91,11 +91,11 @@ a:hover {
     box-shadow: unset;
 }
 
-#backHref {
+.blueBorder {
     border-color: #0C6FFF;
 }
 
-#backHref:hover {
+.blueBorder:hover {
     background-color: unset;
     box-shadow: 0 0 4px rgb(12, 111, 255, 1);
 }
@@ -149,7 +149,7 @@ a:hover {
         box-shadow: 0 0 16px rgb(255, 0, 0, 1);
     }
 
-    #backHref:hover {
+    .blueBorder:hover {
         box-shadow: 0 0 16px rgb(12, 111, 255, 1);
     }
 

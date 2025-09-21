@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Task Tracker</title>
+    <title>Profile - Task Tracker</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Styles/profile.css" type="text/css">
     <script type="module" src="../Scripts/profile.js" defer></script>
 </head>
@@ -44,8 +44,9 @@
             <p id="userMail"><%= profile.getMailId() %></p>
         </div>
         <div class="redirects">
-            <a href="${pageContext.request.contextPath}/" id="backHref"> Back </a>
+            <a href="${pageContext.request.contextPath}/" class="blueBorder"> Back </a>
             <a href="logout"> Logout </a>
+            <a href="edit-profile" class="blueBorder"> Edit </a>
         </div>
     </div>
 </div>
