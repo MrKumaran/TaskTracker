@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
+// This servlet is responsible for authentication signing up new user, login in existing user
 @WebServlet(name = "AuthenticationController", value = {"/landing", "/login", "/signup"})
 public class AuthenticationController extends HttpServlet {
     DBManager dbManager;
