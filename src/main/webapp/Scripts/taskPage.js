@@ -58,6 +58,9 @@ switch (update[0]) {
     case "deletedTask":
         msg = (update[1] === "true")? "Task deleted": "Task didn't deleted"
         break
+    case "profileUpdated":
+        msg = (update[1] === "true")? "Profile details updated":"Profile didn't updated "
+        break
 }
 
 if(update[0] !== "greets" && update[0] !== "null") {
