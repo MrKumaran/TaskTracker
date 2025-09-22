@@ -63,11 +63,7 @@ uploadInput.addEventListener("change", (e) => {
 // deleting profile pic
 removePicBtn.addEventListener("click", () => {
     fetch('/delete-profile-pic', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'mail=' + encodeURIComponent(document.getElementById('userMail').innerText)
+        method: 'POST'
     }).then(res => {
         if (res.ok) {
             window.location.href = "/profile"
