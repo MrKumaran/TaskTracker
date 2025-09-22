@@ -1,0 +1,48 @@
+form {
+    display: block;
+    justify-content: center;
+    font-size: 24px;
+}
+
+li{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+label {
+    width: 150px;
+    font-weight: bold;
+}
+
+input {
+    flex: 1;
+    padding: 15px;
+    background-color: whitesmoke;
+    border:unset;
+    border-radius: 10px;
+}
+
+input:focus {
+    border: none;
+    border-bottom: 2px solid black;
+    outline: none;
+}
+
+button {
+    border: unset;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    border-radius: 10px;
+    text-align: center;
+    min-width: 400px;
+    min-height: 40px;
+    max-width: 450px;
+    max-height: 50px;
+    background-color: #0C6FFF;
+}
+
+button:hover {
+    background-color: #0C6FFF;
+}
