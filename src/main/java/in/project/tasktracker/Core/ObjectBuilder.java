@@ -1,5 +1,6 @@
 package in.project.tasktracker.Core;
 
+import in.project.tasktracker.Model.EditProfileObject;
 import in.project.tasktracker.Model.Task;
 import in.project.tasktracker.Model.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -50,5 +51,15 @@ public class ObjectBuilder {
         return user;
     }
 
+    public static EditProfileObject editProfileObjectBuilder(HttpServletRequest request, String userId) {
+        EditProfileObject editProfileObject = new EditProfileObject();
+        String password = request.getParameter("password");
+        editProfileObject.setUserId(userId);
+        editProfileObject.setUserName(request.getParameter("userName"));
+        editProfileObject.setMail(request.getParameter("mail"));
+        editProfileObject.setSalt((password == null || password.isEmpty())? null: Authentication.generateSalt());
+        editProfileObject.setPassword((password == null || password.isEmpty())? null: Authentication.passwordHash(password, editProfileObject.getSalt()));
+        return editProfileObject;
+    }
 
 }
