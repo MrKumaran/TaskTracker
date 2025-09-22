@@ -1,5 +1,6 @@
 package in.project.tasktracker.Core;
 
+import in.project.tasktracker.Model.EditProfileObject;
 import in.project.tasktracker.Model.Profile;
 import in.project.tasktracker.Model.Task;
 import in.project.tasktracker.Model.User;
@@ -41,6 +42,46 @@ public class DBManager {
             boolean isUpdated = ps.executeUpdate() == 1;
             con.commit();
             return isUpdated;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            rollBack();
+            return false;
+        }
+    }
+
+    // updating profile information
+    public boolean updateProfile(EditProfileObject editProfileObject) {
+        boolean isPasswordPresent = !(editProfileObject.getPassword() == null || editProfileObject.getPassword().isEmpty());
+//        System.out.println(editProfileObject);
+        String query = (isPasswordPresent)?
+                "UPDATE authentication SET mail = ?, password = ?, salt = ? WHERE user_id = ?":
+                "UPDATE authentication SET mail = ? WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, editProfileObject.getMail());
+            if(isPasswordPresent) {
+                ps.setString(2, editProfileObject.getPassword());
+                ps.setString(3, editProfileObject.getSalt());
+                ps.setString(4, editProfileObject.getUserId());
+            } else {
+                ps.setString(2, editProfileObject.getUserId());
+            }
+            isPasswordPresent = ps.executeUpdate() == 1;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            rollBack();
+            return false;
+        }
+        if (!isPasswordPresent) {
+            rollBack();
+            return false;
+        }
+        query = "UPDATE profile SET user_name = ? WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, editProfileObject.getUserName());
+            ps.setString(2, editProfileObject.getUserId());
+            ps.executeUpdate();
+            con.commit();
+            return true;
         } catch (SQLException e) {
             e.printStackTrace();
             rollBack();
@@ -167,12 +208,25 @@ public class DBManager {
     }
 
     public boolean signupViaMail(User user) {
-        String query = "INSERT INTO profile(user_id, user_name, avatar_url) Values (?,?,?)";
+        String query = "INSERT INTO authentication(user_id, mail, password, salt) Values (?,?,?,?)";
+        try(PreparedStatement ps = con.prepareStatement(query)){
+            ps.setString(1, user.getUserId());
+            ps.setString(2, user.getMail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getSalt());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            rollBack();
+            return false;
+        }
+        query = "INSERT INTO profile(user_id, user_name, avatar_url) Values (?,?,?)";
         try(PreparedStatement ps = con.prepareStatement(query)){
             ps.setString(1, user.getUserId());
             ps.setString(2, user.getUserName());
             ps.setString(3, user.getAvatarURL());
             ps.executeUpdate();
+            con.commit();
         } catch (SQLException e) {
             try {
                 con.rollback();
@@ -181,19 +235,6 @@ public class DBManager {
                 return false;
             }
             e.printStackTrace();
-            return false;
-        }
-        query = "INSERT INTO authentication(user_id, mail, password, salt) Values (?,?,?,?)";
-        try(PreparedStatement ps = con.prepareStatement(query)){
-            ps.setString(1, user.getUserId());
-            ps.setString(2, user.getMail());
-            ps.setString(3, user.getPassword());
-            ps.setString(4, user.getSalt());
-            ps.executeUpdate();
-            con.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
             return false;
         }
         return true;
