@@ -36,6 +36,8 @@
         <url-pattern>/upload-profile-pic</url-pattern>
         <url-pattern>/delete-profile-pic</url-pattern>
         <url-pattern>/updateProfile</url-pattern>
+        <url-pattern>/edit-profile</url-pattern>
+        <url-pattern>/deleteAccount</url-pattern>
     </filter-mapping>
 
     <filter>
