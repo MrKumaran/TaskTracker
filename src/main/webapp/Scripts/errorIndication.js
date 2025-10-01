@@ -1,6 +1,5 @@
 const errorIndicator = document.getElementById("errorDiv")
 const errorMessage = errorIndicator.innerText
-console.log(errorMessage)
 
 switch (errorMessage) {
     case "passwordNotMatch":
