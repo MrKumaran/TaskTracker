@@ -5,7 +5,7 @@
 <head>
     <title>Profile - Task Tracker</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Styles/profile.css" type="text/css">
-    <script type="module" src="../Scripts/profile.js" defer></script>
+    <script type="module" src="../Scripts/profilePicUpdater.js" defer></script>
 </head>
 <body>
 <%
