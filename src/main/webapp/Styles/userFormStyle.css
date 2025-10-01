@@ -2,31 +2,36 @@ form {
     display: block;
     justify-content: center;
     font-size: 24px;
+    width: 600px;
 }
 
 li{
     display: flex;
+    width: 500px;
     align-items: center;
     margin-bottom: 10px;
 }
 
 label {
-    width: 150px;
+    width: 250px;
     font-weight: bold;
+    margin-right: 8px;
 }
 
 input {
     flex: 1;
     padding: 15px;
-    background-color: whitesmoke;
+    background-color: #f1eeee;
     border:unset;
     border-radius: 10px;
+    font-size: large;
 }
 
 input:focus {
     border: none;
     border-bottom: 2px solid black;
     outline: none;
+    box-shadow: 0 0 4px rgb(0, 0, 0, 0.1);
 }
 
 button {
@@ -36,13 +41,20 @@ button {
     color: white;
     border-radius: 10px;
     text-align: center;
-    min-width: 400px;
-    min-height: 40px;
-    max-width: 450px;
-    max-height: 50px;
+    width: 500px;
+    height: 50px;
     background-color: #0C6FFF;
 }
 
 button:hover {
     background-color: #0C6FFF;
+}
+
+@media (prefers-color-scheme: dark) {
+    input:focus {
+        border: none;
+        border-bottom: 2px solid black;
+        outline: none;
+        box-shadow: 0 0 4px rgb(0, 0, 0, 0.1);
+    }
 }

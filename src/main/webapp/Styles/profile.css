@@ -3,57 +3,14 @@
 @import "base.css";
 @import "font.css";
 @import "sideNotification.css";
-
-#logo {
-    width: 75px;
-    height: 75px;
-}
-
-#profilePicDiv {
-    max-height: 150px;
-    max-width: 150px;
-}
-
-#profilePic {
-    width: 150px;
-    height: 150px;
-    border-radius: 100%;
-
-}
-
-.app-title {
-    display: flex;
-    column-gap: 12px;
-    align-items: center;
-    margin-top: 4rem;
-    font-size: larger;
-}
+@import "appTitle.css";
+@import "redirectLinks.css";
+@import "profileBody.css";
+@import "userAvatarProfileView.css";
 
 .container{
     display: flex;
     flex-direction: column;
-}
-
-.body {
-    height: 50%;
-    width: 60%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
-
-.userAvatarDiv {
-    width: 150px;
-    height: 150px;
-    margin: 2rem;
-    position: relative;
-}
-
-#userAvatarId {
-    padding-left: 5px;
-    width: 125px;
-    height: 125px;
 }
 
 .userDetails {
@@ -65,101 +22,8 @@
     background-color: #dad9d9;
 }
 
-a {
-    min-width: 100px;
-    min-height: 50px;
-    text-decoration: none;
-    color: black;
-    border-radius: 25px;
-    border: 2px solid red;
-    display: grid;
-    justify-content: center;
-    align-content: center;
-    margin-top: 2rem;
-}
-
-a:hover {
-    box-shadow: 0 0 4px rgb(255, 0, 0, 1);
-}
-
-#app-title-id {
-    border: unset;
-}
-
-#app-title-id:hover {
-    background-color: unset;
-    box-shadow: unset;
-}
-
-.blueBorder {
-    border-color: #0C6FFF;
-}
-
-.blueBorder:hover {
-    background-color: unset;
-    box-shadow: 0 0 4px rgb(12, 111, 255, 1);
-}
-
-.redirects {
-    display: flex;
-    column-gap: 24px;
-}
-
-.pic-options {
-    display: none;
-    position: absolute;
-    grid-template-columns: 1fr;
-    justify-items: center;
-    top: 90%;
-    left: 50%;
-    background: #fff;
-    box-shadow: 0 2px 6px rgb(0, 0, 0);
-    padding: 6px;
-    z-index: 4;
-    border-radius: 12px;
-    min-width: 100px;
-    min-height: 60px;
-}
-
-.pic-options button {
-    font: inherit;
-    font-size: small;
-    display: block;
-    width: 100%;
-    background: none;
-    border:2px solid #ffffff;
-    border-radius: 8px;
-}
-
-.pic-options button:hover {
-    border:2px solid #0C6FFF;
-    box-shadow: 0 0 4px rgb(12, 111, 255);
-}
-
 @media (prefers-color-scheme: dark) {
-    a {
-        color: white;
-    }
-
     .userDetails {
         background-color: #2e2d2d;
-    }
-
-    a:hover {
-        box-shadow: 0 0 16px rgb(255, 0, 0, 1);
-    }
-
-    .blueBorder:hover {
-        box-shadow: 0 0 16px rgb(12, 111, 255, 1);
-    }
-
-    .pic-options {
-        background: #3a3742;
-        box-shadow: 0 0 12px rgb(81, 80, 80);
-    }
-
-    .pic-options button {
-        color: white;
-        border-color: #3a3742 ;
     }
 }

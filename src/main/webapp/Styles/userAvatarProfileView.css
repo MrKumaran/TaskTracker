@@ -1,0 +1,68 @@
+#profilePicDiv {
+    max-height: 150px;
+    max-width: 150px;
+}
+
+#profilePic {
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+
+}
+
+.userAvatarDiv {
+    width: 150px;
+    height: 150px;
+    margin: 2rem;
+    position: relative;
+}
+
+#userAvatarId {
+    padding-left: 5px;
+    width: 125px;
+    height: 125px;
+}
+
+.pic-options {
+    display: none;
+    position: absolute;
+    grid-template-columns: 1fr;
+    justify-items: center;
+    top: 90%;
+    left: 50%;
+    background: rgba(255, 255, 255);
+    box-shadow: 0 2px 6px rgb(0, 0, 0);
+    padding: 6px;
+    z-index: 4;
+    border-radius: 12px;
+    min-width: 100px;
+    min-height: 60px;
+}
+
+.pic-options button {
+    color: black;
+    font: inherit;
+    font-size: small;
+    display: block;
+    width: 100%;
+    background: none;
+    border:2px solid #ffffff;
+    border-radius: 8px;
+}
+
+.pic-options button:hover {
+    border:2px solid #0C6FFF;
+    box-shadow: 0 0 4px rgb(12, 111, 255);
+}
+
+@media (prefers-color-scheme: dark) {
+    .pic-options {
+        background: #3a3742;
+        box-shadow: 0 0 12px rgb(81, 80, 80);
+    }
+
+    .pic-options button {
+        color: white;
+        border-color: #3a3742 ;
+    }
+}

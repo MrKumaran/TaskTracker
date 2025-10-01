@@ -1,0 +1,44 @@
+.redirects {
+    display: flex;
+    column-gap: 24px;
+}
+
+a {
+    min-width: 100px;
+    min-height: 50px;
+    text-decoration: none;
+    color: black;
+    border-radius: 25px;
+    border: 2px solid red;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    margin-top: 2rem;
+}
+
+a:hover {
+    box-shadow: 0 0 4px rgb(255, 0, 0, 1);
+}
+
+.blueBorder {
+    border-color: #0C6FFF;
+}
+
+.blueBorder:hover {
+    background-color: unset;
+    box-shadow: 0 0 4px rgb(12, 111, 255, 1);
+}
+
+@media (prefers-color-scheme: dark) {
+    a {
+        color: white;
+    }
+
+    a:hover {
+        box-shadow: 0 0 16px rgb(255, 0, 0, 1);
+    }
+
+    .blueBorder:hover {
+        box-shadow: 0 0 16px rgb(12, 111, 255, 1);
+    }
+}
