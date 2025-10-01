@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 
 // This servlet is responsible for profile related operation except profile image -> it was managed by API/ProfileImageUpdater.java
@@ -19,7 +20,8 @@ import java.io.IOException;
                 "/profile",
                 "/logout",
                 "/edit-profile",
-                "/updateProfile"
+                "/updateProfile",
+                "/deleteAccount"
 })
 public class ProfileController extends HttpServlet {
     DBManager dbManager;
@@ -55,12 +57,44 @@ public class ProfileController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
         String path = request.getServletPath();
+        String currPswrd = "";
+        // This is purely for education purpose using diff option for checking password...
+        if(path.equals("/updateProfile")) {
+            currPswrd = request.getParameter("current-password");
+        } else if(path.equals("/deleteAccount")) {
+            StringBuilder sb = new StringBuilder();
+            try (BufferedReader reader = request.getReader()) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            currPswrd =  sb.toString().split(":")[1];
+            currPswrd = currPswrd.substring(1, currPswrd.length()-2);
+        }
+
+        System.out.println(currPswrd);
+        boolean isAuthenticated = dbManager.loginViaMail(
+                dbManager.retrieveProfile((String)session.getAttribute("user")).getMailId(),
+                currPswrd
+        ) != null;
+        if(!isAuthenticated) {
+            session.invalidate();
+            response.sendRedirect("/landing");
+            return;
+        }
         if(path.equals("/updateProfile")) {
             User userProfile = ObjectBuilder.userObjectBuilder(request, (String) session.getAttribute("user"));
             boolean isOperationSuccess = dbManager.updateProfile(userProfile);
             session.setAttribute("operation", "profileUpdated");
             session.setAttribute("isOperationSuccess", isOperationSuccess);
             response.sendRedirect("/");
+        } else if(path.equals("/deleteAccount")) {
+            dbManager.deleteAccount((String) session.getAttribute("user"));
+            session.invalidate();
+            response.sendRedirect("/landing");
         }
     }
 
