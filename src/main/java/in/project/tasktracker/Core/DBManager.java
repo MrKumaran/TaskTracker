@@ -1,6 +1,5 @@
 package in.project.tasktracker.Core;
 
-import in.project.tasktracker.Model.EditProfileObject;
 import in.project.tasktracker.Model.Profile;
 import in.project.tasktracker.Model.Task;
 import in.project.tasktracker.Model.User;
@@ -50,9 +49,8 @@ public class DBManager {
     }
 
     // updating profile information
-    public boolean updateProfile(EditProfileObject editProfileObject) {
+    public boolean updateProfile(User editProfileObject) {
         boolean isPasswordPresent = !(editProfileObject.getPassword() == null || editProfileObject.getPassword().isEmpty());
-//        System.out.println(editProfileObject);
         String query = (isPasswordPresent)?
                 "UPDATE authentication SET mail = ?, password = ?, salt = ? WHERE user_id = ?":
                 "UPDATE authentication SET mail = ? WHERE user_id = ?";
@@ -146,7 +144,7 @@ public class DBManager {
     }
 
     // updating task status
-    public boolean updateCompletedTask(String userId, String taskId, boolean isDone) {
+    public boolean updateTaskStatus(String userId, String taskId, boolean isDone) {
         String query = "UPDATE task SET isDone = ?, completedAt = ? WHERE user_Id = ? AND task_Id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)) {
             ps.setBoolean(1, isDone);

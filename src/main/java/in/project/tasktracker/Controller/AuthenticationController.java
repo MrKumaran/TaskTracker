@@ -49,7 +49,7 @@ public class AuthenticationController extends HttpServlet {
             response.sendRedirect("/login");
             return;
         }
-        User user = ObjectBuilder.userObjectBuilder(request);
+        User user = ObjectBuilder.userObjectBuilder(request, null);
         boolean isSignUp = dbManager.signupViaMail(user);
         if (isSignUp) {
             HttpSession session = request.getSession();

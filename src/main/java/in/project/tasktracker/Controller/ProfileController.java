@@ -2,8 +2,8 @@ package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
 import in.project.tasktracker.Core.ObjectBuilder;
-import in.project.tasktracker.Model.EditProfileObject;
 import in.project.tasktracker.Model.Profile;
+import in.project.tasktracker.Model.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -56,8 +56,8 @@ public class ProfileController extends HttpServlet {
         HttpSession session = request.getSession(false);
         String path = request.getServletPath();
         if(path.equals("/updateProfile")) {
-            EditProfileObject profileObject = ObjectBuilder.editProfileObjectBuilder(request, (String) session.getAttribute("user"));
-            boolean isOperationSuccess = dbManager.updateProfile(profileObject);
+            User userProfile = ObjectBuilder.userObjectBuilder(request, (String) session.getAttribute("user"));
+            boolean isOperationSuccess = dbManager.updateProfile(userProfile);
             session.setAttribute("operation", "profileUpdated");
             session.setAttribute("isOperationSuccess", isOperationSuccess);
             response.sendRedirect("/");
