@@ -51,27 +51,22 @@ public class DBManager {
     // updating profile information
     public boolean updateProfile(User editProfileObject) {
         boolean isPasswordPresent = !(editProfileObject.getPassword() == null || editProfileObject.getPassword().isEmpty());
-        String query = (isPasswordPresent)?
-                "UPDATE authentication SET mail = ?, password = ?, salt = ? WHERE user_id = ?":
-                "UPDATE authentication SET mail = ? WHERE user_id = ?";
-        try(PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setString(1, editProfileObject.getMail());
-            if(isPasswordPresent) {
-                ps.setString(2, editProfileObject.getPassword());
-                ps.setString(3, editProfileObject.getSalt());
-                ps.setString(4, editProfileObject.getUserId());
-            } else {
-                ps.setString(2, editProfileObject.getUserId());
+        String query = "UPDATE authentication SET password = ?, salt = ? WHERE user_id = ?";
+        if(isPasswordPresent) {
+            try(PreparedStatement ps = con.prepareStatement(query)) {
+                    ps.setString(1, editProfileObject.getPassword());
+                    ps.setString(2, editProfileObject.getSalt());
+                    ps.setString(3, editProfileObject.getUserId());
+                isPasswordPresent = ps.executeUpdate() == 1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                rollBack();
+                return false;
             }
-            isPasswordPresent = ps.executeUpdate() == 1;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
-            return false;
-        }
-        if (!isPasswordPresent) {
-            rollBack();
-            return false;
+            if (!isPasswordPresent) {
+                rollBack();
+                return false;
+            }
         }
         query = "UPDATE profile SET user_name = ? WHERE user_id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)) {
@@ -276,6 +271,19 @@ public class DBManager {
             return null;
         }
         return profile;
+    }
+
+    // Deleting user profile as soon as requested
+    public void deleteAccount(String userId) {
+        String query = "DELETE FROM authentication WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, userId);
+            ps.executeUpdate();
+            con.commit();
+        } catch (SQLException e){
+            e.printStackTrace();
+            rollBack();
+        }
     }
 
     // common method to rollback db if error occurs
