@@ -1,5 +1,7 @@
-package in.project.tasktracker.Core;
+package in.project.tasktracker.Controller;
 
+import in.project.tasktracker.Core.DBManager;
+import in.project.tasktracker.Core.ImageManager;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
