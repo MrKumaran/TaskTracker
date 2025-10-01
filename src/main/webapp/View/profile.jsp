@@ -3,9 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Task Tracker</title>
+    <title>Profile - Task Tracker</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Styles/profile.css" type="text/css">
-    <script type="module" src="../Scripts/profile.js" defer></script>
+    <script type="module" src="../Scripts/profilePicUpdater.js" defer></script>
 </head>
 <body>
 <%
@@ -31,6 +31,9 @@
             <div class="pic-options" id="picOptions">
                 <button id="viewPicBtn">View</button>
                 <button id="uploadPicBtn">Upload New</button>
+                <% if (!(profile.getAvatarURL() == null) && !profile.getAvatarURL().isEmpty()) { %>
+                <button id="removePicBtn">Remove</button>
+                <% } %>
                 <input type="file" id="uploadInput" style="display:none">
             </div>
         </div>
@@ -41,8 +44,9 @@
             <p id="userMail"><%= profile.getMailId() %></p>
         </div>
         <div class="redirects">
-            <a href="${pageContext.request.contextPath}/" id="backHref"> Back </a>
+            <a href="${pageContext.request.contextPath}/" class="blueBorder"> Back </a>
             <a href="logout"> Logout </a>
+            <a href="edit-profile" class="blueBorder"> Edit </a>
         </div>
     </div>
 </div>

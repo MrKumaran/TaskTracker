@@ -5,6 +5,7 @@ const picOptions = document.getElementById("picOptions")
 const viewPicBtn = document.getElementById("viewPicBtn")
 const uploadPicBtn = document.getElementById("uploadPicBtn")
 const uploadInput = document.getElementById("uploadInput")
+const removePicBtn = document.getElementById("removePicBtn")
 
 // Toggle options menu on image click
 profilePicDiv.addEventListener("click", (e) => {
@@ -19,14 +20,16 @@ document.addEventListener("click", (e) => {
 })
 
 // View image
-viewPicBtn.addEventListener("click", () => {
-    const img = profilePicDiv.querySelector("img")
-    if (img && img.src) {
-        window.open(img.src, "_blank")
-    } else {
-        showNotification("No profile image", "false")
-    }
-})
+if(viewPicBtn !== null){
+    viewPicBtn.addEventListener("click", () => {
+        const img = profilePicDiv.querySelector("img")
+        if (img && img.src) {
+            window.open(img.src, "_blank")
+        } else {
+            showNotification("No profile image", "false")
+        }
+    })
+}
 
 // Upload new image
 uploadPicBtn.addEventListener("click", () => {
@@ -39,9 +42,9 @@ uploadInput.addEventListener("change", (e) => {
     if (file) {
         const formData = new FormData()
         formData.append('profilePic', file)
-        fetch('/api/upload-image', {
+        fetch('/upload-profile-pic', {
             method: 'POST',
-            body: formData,
+            body: formData
         })
             .then(response => response.json())
             .then(data => {
@@ -58,3 +61,23 @@ uploadInput.addEventListener("change", (e) => {
             })
     }
 })
+
+// deleting profile pic
+if(removePicBtn !== null){
+    removePicBtn.addEventListener("click", () => {
+        fetch('/delete-profile-pic', {
+            method: 'POST'
+        }).then(res => {
+            if (res.ok) {
+                window.location.href = "/profile"
+            } else {
+                alert("Profile pic removing error :(")
+                window.location.href = "/profile"
+            }
+        })
+            .catch(error => {
+                alert('Error occurred:' + error)
+            })
+
+    })
+}

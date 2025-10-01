@@ -57,7 +57,7 @@ public class TaskController extends HttpServlet {
             }
             case "/updateTaskStatus" -> {
                 try {
-                    isOperationSuccess = dbManager.updateCompletedTask(
+                    isOperationSuccess = dbManager.updateTaskStatus(
                             profile.getUserId(),
                             request.getParameter("taskId"),
                             Boolean.parseBoolean(request.getParameter("isDone"))

@@ -48,6 +48,40 @@ public class DBManager {
         }
     }
 
+    // updating profile information
+    public boolean updateProfile(User editProfileObject) {
+        boolean isPasswordPresent = !(editProfileObject.getPassword() == null || editProfileObject.getPassword().isEmpty());
+        String query = "UPDATE authentication SET password = ?, salt = ? WHERE user_id = ?";
+        if(isPasswordPresent) {
+            try(PreparedStatement ps = con.prepareStatement(query)) {
+                    ps.setString(1, editProfileObject.getPassword());
+                    ps.setString(2, editProfileObject.getSalt());
+                    ps.setString(3, editProfileObject.getUserId());
+                isPasswordPresent = ps.executeUpdate() == 1;
+            } catch (SQLException e) {
+                e.printStackTrace();
+                rollBack();
+                return false;
+            }
+            if (!isPasswordPresent) {
+                rollBack();
+                return false;
+            }
+        }
+        query = "UPDATE profile SET user_name = ? WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, editProfileObject.getUserName());
+            ps.setString(2, editProfileObject.getUserId());
+            ps.executeUpdate();
+            con.commit();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            rollBack();
+            return false;
+        }
+    }
+
     // Task related operations --
     // Getting tasks for user
     public List<Task> retrieveUsersTasks(String user_id) {
@@ -105,7 +139,7 @@ public class DBManager {
     }
 
     // updating task status
-    public boolean updateCompletedTask(String userId, String taskId, boolean isDone) {
+    public boolean updateTaskStatus(String userId, String taskId, boolean isDone) {
         String query = "UPDATE task SET isDone = ?, completedAt = ? WHERE user_Id = ? AND task_Id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)) {
             ps.setBoolean(1, isDone);
@@ -167,12 +201,25 @@ public class DBManager {
     }
 
     public boolean signupViaMail(User user) {
-        String query = "INSERT INTO profile(user_id, user_name, avatar_url) Values (?,?,?)";
+        String query = "INSERT INTO authentication(user_id, mail, password, salt) Values (?,?,?,?)";
+        try(PreparedStatement ps = con.prepareStatement(query)){
+            ps.setString(1, user.getUserId());
+            ps.setString(2, user.getMail());
+            ps.setString(3, user.getPassword());
+            ps.setString(4, user.getSalt());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            rollBack();
+            return false;
+        }
+        query = "INSERT INTO profile(user_id, user_name, avatar_url) Values (?,?,?)";
         try(PreparedStatement ps = con.prepareStatement(query)){
             ps.setString(1, user.getUserId());
             ps.setString(2, user.getUserName());
             ps.setString(3, user.getAvatarURL());
             ps.executeUpdate();
+            con.commit();
         } catch (SQLException e) {
             try {
                 con.rollback();
@@ -181,19 +228,6 @@ public class DBManager {
                 return false;
             }
             e.printStackTrace();
-            return false;
-        }
-        query = "INSERT INTO authentication(user_id, mail, password, salt) Values (?,?,?,?)";
-        try(PreparedStatement ps = con.prepareStatement(query)){
-            ps.setString(1, user.getUserId());
-            ps.setString(2, user.getMail());
-            ps.setString(3, user.getPassword());
-            ps.setString(4, user.getSalt());
-            ps.executeUpdate();
-            con.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
             return false;
         }
         return true;
@@ -237,6 +271,19 @@ public class DBManager {
             return null;
         }
         return profile;
+    }
+
+    // Deleting user profile as soon as requested
+    public void deleteAccount(String userId) {
+        String query = "DELETE FROM authentication WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, userId);
+            ps.executeUpdate();
+            con.commit();
+        } catch (SQLException e){
+            e.printStackTrace();
+            rollBack();
+        }
     }
 
     // common method to rollback db if error occurs

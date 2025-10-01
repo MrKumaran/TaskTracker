@@ -1,0 +1,21 @@
+.app-title {
+    display: flex;
+    column-gap: 12px;
+    align-items: center;
+    margin-top: 4rem;
+    font-size: larger;
+}
+
+#logo {
+    width: 75px;
+    height: 75px;
+}
+
+#app-title-id {
+    border: unset;
+}
+
+#app-title-id:hover {
+    background-color: unset;
+    box-shadow: unset;
+}

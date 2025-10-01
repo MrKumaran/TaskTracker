@@ -39,16 +39,24 @@ public class ObjectBuilder {
         return task;
     }
 
-    public static User userObjectBuilder(HttpServletRequest request) {
+    public static User userObjectBuilder(HttpServletRequest request, String userId) {
         User user = new User();
-        user.setUserId(Authentication.generateUUID());
+        user.setUserId((userId == null || userId.isEmpty())?Authentication.generateUUID():userId);
+        String password = request.getParameter("password");
+        boolean isPasswordPresent = !(password == null || password.isEmpty());
         user.setMail(request.getParameter("mail"));
         user.setUserName(request.getParameter("userName"));
         user.setAvatarURL(request.getParameter("avatarUrl"));
-        user.setSalt(Authentication.generateSalt());
-        user.setPassword(Authentication.passwordHash(request.getParameter("password"), user.getSalt()));
+        user.setSalt(
+                (isPasswordPresent)?
+                        Authentication.generateSalt():
+                        null
+                );
+        user.setPassword(
+                (isPasswordPresent)?
+                        Authentication.passwordHash(password, user.getSalt())
+                        :null
+        );
         return user;
     }
-
-
 }
