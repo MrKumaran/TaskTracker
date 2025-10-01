@@ -36,7 +36,8 @@ Used cloudinary for managing image asset.
 #### Requirements:
 Java 21  
 MySql 8.4  
-Tomcat 10.1.46  
+Tomcat 10.1.46
+Cloudinary API KEY from [Cloudinary](https://cloudinary.com/)  
 IDE of your choice (IntelliJ Idea highly recommended) IDE is for development purpose only  
 Git - optional, can download whole repo [here](https://github.com/MrKumaran/TaskTracker/archive/refs/heads/main.zip) as zip if not git  
 
@@ -45,8 +46,15 @@ Git - optional, can download whole repo [here](https://github.com/MrKumaran/Task
 > only checked for Java openJDK 21, MySql 8.4, Tomcat 10.1.46 for plug and play experience use recommended versions for all
 
 If you want to run on server not development, generate War and copy files into tomcat directory and start Tomcat server, [Refer this](https://www.baeldung.com/tomcat-deploy-war)   
-Config [this](src/main/webapp/META-INF/context.xml) xml with DB details and if you want your application to use HTTPS generate from authorized CA and put into Server.xml
-and good to GO...
+Config [this](src/main/webapp/META-INF/context.xml) xml with DB details and if you want your application to use HTTPS generate from authorized CA and put it into tomcat's Server.xml, in tomcat's context.xml add cloudinary details and good to GO...
+
+Modify below snippet with your details and Add it into tomcat's context.xml
+```XML
+    <Environment name="cloudinary.api.cloudName" value="<YOUR-CLOUD-NAME>" type="java.lang.String"/>
+    <Environment name="cloudinary.api.key" value="<YOUR-API-KEY>" type="java.lang.String"/>
+    <Environment name="cloudinary.api.secret" value="<YOUR-API-SECRET>" type="java.lang.String"/>
+```
+
 > [!CAUTION]
 > if running on home lab want access outside home, port forward it - Do this at your own risk! if not done correct, hacker can hack your network.
 
