@@ -17,10 +17,12 @@ import java.io.IOException;
 public class AuthenticationController extends HttpServlet {
     DBManager dbManager;
 
+    @Override
      public void init() {
         this.dbManager = DBManager.getInstance();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
         switch (path) {
@@ -30,6 +32,7 @@ public class AuthenticationController extends HttpServlet {
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
         if (path.equals("/login")) {
@@ -40,9 +43,10 @@ public class AuthenticationController extends HttpServlet {
     }
 
     private void signupHandler(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // just here as placeholder for now
-        // later it will be replaced by email verification
-        // when I do, no need of this redirect
+        // TODO:
+        //  just here as placeholder for now
+        //  later it will be replaced by email verification
+        //  when I do, no need of this redirect
         String mail = request.getParameter("mail");
         boolean isPresent = dbManager.isNewMail(mail);
         if (isPresent) {
