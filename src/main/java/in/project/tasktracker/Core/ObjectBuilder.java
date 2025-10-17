@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 // This class is responsible for building object
 // It builds object from request
@@ -26,7 +27,9 @@ public class ObjectBuilder {
         JSONObject json = new JSONObject(jsonStringBuilder.toString());
         Task task = new Task();
         task.setUserId(userId);
-        task.setTaskId(Authentication.generateUUID());
+        task.setTaskId(
+                (!Objects.equals(json.optString("taskId"), ""))?json.getString("taskId"):
+                Authentication.generateUUID());
         task.setTaskTitle(json.getString("new-task-title"));
         String dueParam = json.getString("new-task-due");
         LocalDateTime due = null;
