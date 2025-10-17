@@ -2,7 +2,6 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.util.Comparator" %>
 <%@ page import="java.time.LocalDateTime" %>
 <%@ page import="in.project.tasktracker.Model.Profile" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
@@ -18,9 +17,8 @@
     Profile profile = (Profile) request.getAttribute("user");
     @SuppressWarnings("unchecked") List<Task> tasks = (List<Task>) request.getAttribute("tasks");
     if (tasks == null) tasks = new ArrayList<>();
-    else tasks = tasks.stream().sorted(Comparator.comparing(Task::isDone).thenComparing(Task::getDue)).toList();
-    int totalTask = tasks.size();
-    long taskDoneCount = tasks.stream().filter(Task::isDone).count();
+    String totalTask = (String) request.getAttribute("tasksCount");
+    String taskDoneCount = (String) request.getAttribute("tasksDoneCount");
     var operationSession = session.getAttribute("operation");
     var operationStatusSession = session.getAttribute("isOperationSuccess");
     String operation = null;
@@ -104,11 +102,13 @@
                 }
         %>
         <div class="task" id="<%=task.getTaskId()%>" <%= (overdue) ? "style=\"color: #ba5656\"" : "" %>>
-            <label class="custom-checkbox">
-                <input type="checkbox" class="task-checkbox"
-                       value="<%=task.getTaskId()%>" <%=task.isDone() ? "checked" : ""%>>
-                <span class="circle"></span>
-            </label>
+            <% if (!task.isDone()) {%>
+                <label class="custom-checkbox">
+                    <input type="checkbox" class="task-checkbox"
+                           value="<%=task.getTaskId()%>" <%=task.isDone() ? "checked" : ""%>>
+                    <span class="circle"></span>
+                </label>
+            <% } %>
             <h4><%= task.getTaskTitle() %>
             </h4>
             <h3>
@@ -133,9 +133,13 @@
                 %>
             </h3>
             <div class="editOptions">
+                <% if (!task.isDone()) {%>
                 <div class="editTask" id="<%=task.getTaskId()%>">
-                    <%@include file="../assets/editVector.svg" %>
+                    <a href="${pageContext.request.contextPath}/editTask?taskId=<%=task.getTaskId()%>">
+                        <%@include file="../assets/editVector.svg" %>
+                    </a>
                 </div>
+                <% }%>
                 <div class="deleteTask" id="<%=task.getTaskId()%>">
                     <%@include file="../assets/deleteVector.svg" %>
                 </div>
