@@ -3,12 +3,11 @@ package in.project.tasktracker.Core;
 import in.project.tasktracker.Model.Profile;
 import in.project.tasktracker.Model.Task;
 import in.project.tasktracker.Model.User;
-
+import in.project.tasktracker.Model.UserTasks;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 // This class is responsible for all DB operations
@@ -84,9 +83,10 @@ public class DBManager {
 
     // Task related operations --
     // Getting tasks for user
-    public List<Task> retrieveUsersTasks(String user_id) {
-        List<Task> tasks = new ArrayList<>();
-        String query = "SELECT user_id, task_id, task_title, due, isDone, completedAt FROM task WHERE user_id = ?";
+    public UserTasks retrieveUsersTasks(String user_id) {
+        UserTasks userTasks = new UserTasks();
+        List<Task> tasks = userTasks.getTasks();
+        String query = "SELECT user_id, task_id, task_title, due, isDone, completedAt FROM task WHERE user_id = ? ORDER BY isDone, due, completedAt";
         try(PreparedStatement ps = con.prepareStatement(query)){
             ps.setString(1, user_id);
             ResultSet rs = ps.executeQuery();
@@ -114,13 +114,37 @@ public class DBManager {
             e.printStackTrace();
             rollBack();
         }
-        return tasks;
+
+        query = "SELECT COUNT(task_id) as Total_Count, SUM(isDone) as Total_Done_Count FROM task WHERE user_id = ?";
+        try(PreparedStatement statement = con.prepareStatement(query)) {
+            statement.setString(1, user_id);
+            ResultSet resultSet = statement.executeQuery();
+            if(resultSet.next()){
+                userTasks.setTasksCount(
+                        resultSet.getLong("Total_Count")
+                );
+                userTasks.setTasksDoneCount(
+                        resultSet.getLong("Total_Done_Count")
+                );
+            }
+            con.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            rollBack();
+        }
+        return userTasks;
     }
 
     // Adding new task for user
-    public boolean addTask(Task task) {
-        String query = "INSERT INTO task(user_id, task_id, task_title, due, isDone, completedAt) VALUES" +
-                "(?,?,?,?,?,?)";
+    public boolean upsertTask(Task task) {
+        String query = "INSERT INTO task(user_id, task_id, task_title, due, isDone, completedAt) VALUES " +
+                "(?,?,?,?,?,?) " +
+                "ON DUPLICATE KEY UPDATE " +
+                "user_id = VALUES(user_id), " +
+                "task_title = VALUES(task_title), " +
+                "due = VALUES(due), " +
+                "isDone = VALUES(isDone), " +
+                "completedAt = VALUES(completedAt)";
         try(PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, task.getUserId());
             ps.setString(2, task.getTaskId());
@@ -170,6 +194,33 @@ public class DBManager {
             rollBack();
             return false;
         }
+    }
+
+    // retrieve task
+    public Task getTaskByID(String taskId, String userId){
+        Task task = new Task();
+        String query = "SELECT task_title, due FROM task WHERE user_id = ? AND task_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)){
+            ps.setString(1, userId);
+            ps.setString(2, taskId);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                task.setTaskTitle(
+                        rs.getString("task_title")
+                );
+                task.setTaskId(taskId);
+                task.setUserId(userId);
+                task.setDone(false);
+                task.setCompletedAt(null);
+                task.setDue(LocalDateTime.parse(
+                        rs.getString("due").replace(" ", "T")
+                ));
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+            rollBack();
+        }
+        return task;
     }
 
     // Authentication related operations--
