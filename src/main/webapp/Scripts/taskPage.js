@@ -3,7 +3,6 @@ import { showNotification } from './sideNotification.js'
 document.getElementById("new-task-btn").addEventListener("click", newTask)
 const newTaskDialog = document.getElementById("new-task")
 const myCheckbox = document.querySelectorAll(".task-checkbox")
-const editTaskVector = document.querySelectorAll(".editTask")
 const deleteTaskVector = document.querySelectorAll(".deleteTask")
 let update = document.getElementById("sideNotification").innerText
 const outsideEvent = document.getElementById("new-task")
@@ -21,15 +20,6 @@ myCheckbox.forEach(
     checkBox => {
         checkBox.addEventListener("click", (e) => {
                 updateTaskStatus(e)
-            }
-        )
-    }
-    )
-
-editTaskVector.forEach(
-    edit => {
-        edit.addEventListener("click", (e) => {
-                editTask(e)
             }
         )
     }
@@ -61,15 +51,16 @@ switch (update[0]) {
     case "profileUpdated":
         msg = (update[1] === "true")? "Profile details updated":"Profile didn't updated "
         break
+    case "DataFetch":
+        msg = "Error fetching data Refresh"
+        break
+    case "taskUpdate":
+        msg = (update[1] === "true")? "Task successfully Updated":"Task didn't updated "
+        break
 }
 
 if(update[0] !== "greets" && update[0] !== "null") {
     showNotification(msg, update[1])
-}
-
-function editTask(e) {
-    const taskId = e.currentTarget.getAttribute("id")
-    console.log("Edit Task Id: " + taskId)
 }
 
 function deleteTask(e) {
@@ -88,8 +79,7 @@ function deleteTask(e) {
             alert("Deleting task Failed, Try again :(")
             window.location.href = "/"
         }
-    })
-        .catch(error => {
+    } ).catch(error => {
             alert('Error occurred:' + error)
         })
 }
@@ -128,7 +118,6 @@ function newTask() {
             "new-task-title": document.getElementById("new-task-title").value,
             "new-task-due": document.getElementById("new-task-due").value
         }
-        console.log(payload)
         fetch('/newTask', {
             method: 'POST',
             headers: {
