@@ -69,7 +69,6 @@ public class TaskController extends HttpServlet {
         boolean isOperationSuccess = false;
         Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
         response.setContentType("application/json"); // This is here to send response to JS, so that it will alert user about operation
-        System.out.println(path);
         switch (path) {
             case "/newTask" -> {
                 Task task = ObjectBuilder.taskObjectBuilder(request, profile.getUserId());
