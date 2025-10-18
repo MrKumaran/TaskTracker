@@ -46,13 +46,18 @@ Git - optional, can download whole repo [here](https://github.com/MrKumaran/Task
 > only checked for Java openJDK 21, MySql 8.4, Tomcat 10.1.46 for plug and play experience use recommended versions for all
 
 If you want to run on server not development, generate War and copy files into tomcat directory and start Tomcat server, [Refer this](https://www.baeldung.com/tomcat-deploy-war)   
-Config [this](src/main/webapp/META-INF/context.xml) xml with DB details and if you want your application to use HTTPS generate from authorized CA and put it into tomcat's Server.xml, in tomcat's context.xml add cloudinary details and good to GO...
+Config context.xml in tomcat server with DB details and if you want your application to use HTTPS generate from authorized CA and put it into tomcat's Server.xml, in tomcat's context.xml add cloudinary details and good to GO...
 
 Modify below snippet with your details and Add it into tomcat's context.xml
 ```XML
     <Environment name="cloudinary.api.cloudName" value="<YOUR-CLOUD-NAME>" type="java.lang.String"/>
     <Environment name="cloudinary.api.key" value="<YOUR-API-KEY>" type="java.lang.String"/>
     <Environment name="cloudinary.api.secret" value="<YOUR-API-SECRET>" type="java.lang.String"/>
+    <Resource name="db/tasktracker" auth="Container" type="javax.sql.DataSource"
+      maxTotal="20" maxIdle="1" maxWaitMillis="5000"
+      username="<DB user>" password="<DB password>"
+      driverClassName="com.mysql.cj.jdbc.Driver"
+      url="jdbc:mysql://<DB HOST>:<DB port>/tasktracker"/>
 ```
 
 > [!CAUTION]
