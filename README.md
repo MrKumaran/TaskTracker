@@ -24,13 +24,13 @@ This is fully using HTTPS not HTTP configured in server.xml in conf dir of tomca
 for data in transit, Server Side Rendering Web Application.
 Used cloudinary for managing image asset.
 
-### Future of this project:
+<!-- ### Future of this project:
 -> Filter option  
 -> progress bar  
 -> make UI like calendar to track as per day  
 -> add logic and page modification for editing task => task edit can edit task title, task due date  
 -> paging to reduce lag (Most probably covered with calendar style dashboard)  
--> add API so that can access via mobile app build later that communicate to this server for JSON response  
+-> add API so that can access via mobile app build later that communicate to this server for JSON response  -->
 
 ### Want to Run this Locally? here step to follow:
 #### Requirements:
