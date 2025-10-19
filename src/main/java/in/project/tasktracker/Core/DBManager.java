@@ -237,7 +237,7 @@ public class DBManager {
             return null;
         }
         if (salt == null) return null;
-        String passwordHash = Authentication.passwordHash(password, salt);
+        String passwordHash = new Authentication().passwordHash(password, salt);
         query = "SELECT user_id FROM authentication WHERE mail = ? AND password = ?";
         try(PreparedStatement ps = con.prepareStatement(query)) {
             ps.setString(1, mail);
