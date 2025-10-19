@@ -16,6 +16,14 @@ switch (errorMessage) {
         errorIndicator.style.display = 'block'
         errorIndicator.innerText = "Entered credentials didn't match"
         break
+    case "PasswordNotOK":
+        errorIndicator.style.display = 'block'
+        errorIndicator.innerText = "Password is not complex enough\n" +
+            "Password should consist of\n" +
+            "1 Uppercase, 1 Lowercase\n" +
+            "1 number[0-9], 1 from @$!%*?&\n" +
+            "and length should be 8 - 20"
+        break
 }
 
 setTimeout( () => {

@@ -29,7 +29,7 @@ public class ObjectBuilder {
         task.setUserId(userId);
         task.setTaskId(
                 (!Objects.equals(json.optString("taskId"), ""))?json.getString("taskId"):
-                Authentication.generateUUID());
+                new Authentication().generateUUID());
         task.setTaskTitle(json.getString("new-task-title"));
         String dueParam = json.getString("new-task-due");
         LocalDateTime due = null;
@@ -42,22 +42,27 @@ public class ObjectBuilder {
         return task;
     }
 
-    public static User userObjectBuilder(HttpServletRequest request, String userId) {
+    public static User userObjectBuilder(HttpServletRequest request, String userId) { // if null is returned then password not valid
+        Authentication authentication = new Authentication();
         User user = new User();
-        user.setUserId((userId == null || userId.isEmpty())?Authentication.generateUUID():userId);
+        user.setUserId((userId == null || userId.isEmpty())?authentication.generateUUID():userId);
         String password = request.getParameter("password");
-        boolean isPasswordPresent = !(password == null || password.isEmpty());
+        boolean isPasswordPresent = !(password == null || password.isEmpty()); // Also using for profile update so something password will not be provided
+        if(isPasswordPresent){
+            boolean passCheck = authentication.passwordStrengthCheck(password);
+            if (!passCheck) return null;
+        }
         user.setMail(request.getParameter("mail"));
         user.setUserName(request.getParameter("userName"));
         user.setAvatarURL(request.getParameter("avatarUrl"));
         user.setSalt(
                 (isPasswordPresent)?
-                        Authentication.generateSalt():
+                        authentication.generateSalt():
                         null
                 );
         user.setPassword(
                 (isPasswordPresent)?
-                        Authentication.passwordHash(password, user.getSalt())
+                        authentication.passwordHash(password, user.getSalt())
                         :null
         );
         return user;

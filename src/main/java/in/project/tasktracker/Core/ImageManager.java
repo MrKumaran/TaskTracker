@@ -2,11 +2,13 @@ package in.project.tasktracker.Core;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import jakarta.servlet.http.Part;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import java.io.IOException;
+import java.io.InputStream;
 
 // This class is responsible for communicating with cloudinary
 // It has method to upload image to cloud and return secure_url
@@ -38,9 +40,13 @@ public class ImageManager {
         return INSTANCE;
     }
 
-    public String uploadImage(String path) throws IOException {
+    public String uploadImage(Part file) throws IOException {
+        byte[] fileBytes;
+        try (InputStream inputStream = file.getInputStream()) {
+            fileBytes = inputStream.readAllBytes(); // Requires Java 9+
+        }
         return cloudinary.uploader()
-                        .upload(path, ObjectUtils.emptyMap()).get("secure_url").toString();
+                        .upload(fileBytes, ObjectUtils.emptyMap()).get("secure_url").toString();
     }
 
     public void deleteOldImage(String url) throws IOException {
