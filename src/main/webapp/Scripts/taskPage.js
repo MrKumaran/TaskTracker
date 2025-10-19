@@ -10,7 +10,6 @@ update = update.split(",")
 
 // attaching event listeners
 outsideEvent.addEventListener("click", (e) => {
-    console.log("Dialog outside click")
     if(e.target === outsideEvent) {
         newTaskDialog.close()
     }
@@ -56,6 +55,9 @@ switch (update[0]) {
         break
     case "taskUpdate":
         msg = (update[1] === "true")? "Task successfully Updated":"Task didn't updated "
+        break
+    case "profileUpdated:password":
+        msg = "Profile didn't updated:\n Password isn't complex Enough"
         break
 }
 
