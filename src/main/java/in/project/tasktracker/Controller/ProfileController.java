@@ -74,8 +74,6 @@ public class ProfileController extends HttpServlet {
             currPswrd =  sb.toString().split(":")[1];
             currPswrd = currPswrd.substring(1, currPswrd.length()-2);
         }
-
-        System.out.println(currPswrd);
         boolean isAuthenticated = dbManager.loginViaMail(
                 dbManager.retrieveProfile((String)session.getAttribute("user")).getMailId(),
                 currPswrd
@@ -87,6 +85,12 @@ public class ProfileController extends HttpServlet {
         }
         if(path.equals("/updateProfile")) {
             User userProfile = ObjectBuilder.userObjectBuilder(request, (String) session.getAttribute("user"));
+            if (userProfile == null) { // if user object is null then password not valid
+                session.setAttribute("operation", "profileUpdated:password");
+                session.setAttribute("isOperationSuccess", false);
+                response.sendRedirect("/");
+                return;
+            }
             boolean isOperationSuccess = dbManager.updateProfile(userProfile);
             session.setAttribute("operation", "profileUpdated");
             session.setAttribute("isOperationSuccess", isOperationSuccess);
