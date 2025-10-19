@@ -54,6 +54,11 @@ public class AuthenticationController extends HttpServlet {
             return;
         }
         User user = ObjectBuilder.userObjectBuilder(request, null);
+        if (user == null) {
+            request.setAttribute("error", "PasswordNotOK");
+            request.getRequestDispatcher("View/signup.jsp").forward(request, response);
+            return;
+        }
         boolean isSignUp = dbManager.signupViaMail(user);
         if (isSignUp) {
             HttpSession session = request.getSession();
