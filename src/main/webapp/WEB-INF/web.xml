@@ -13,13 +13,43 @@
 
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Task Tracker</web-resource-name>
-            <url-pattern>/*</url-pattern>
+            <web-resource-name>Public Area</web-resource-name>
+            <url-pattern>/Styles/*</url-pattern>
+            <url-pattern>/Scripts/*</url-pattern>
+            <url-pattern>/assets/*</url-pattern>
+            <url-pattern>/login</url-pattern>
+            <url-pattern>/signup</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
     </security-constraint>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Protected Area</web-resource-name>
+            <url-pattern>/delete-profile-pic</url-pattern>
+            <url-pattern>/updateTaskStatus</url-pattern>
+            <url-pattern>/deleteTask</url-pattern>
+            <url-pattern>/editTask</url-pattern>
+            <url-pattern>/upload-profile-pic</url-pattern>
+            <url-pattern>/newTask</url-pattern>
+            <url-pattern>/profile</url-pattern>
+            <url-pattern>/logout</url-pattern>
+            <url-pattern>/edit-profile</url-pattern>
+            <url-pattern>/updateProfile</url-pattern>
+            <url-pattern>/deleteAccount</url-pattern>
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/Styles/*</url-pattern>
+        <url-pattern>/Scripts/*</url-pattern>
+    </servlet-mapping>
 
     <filter>
         <filter-name>AuthorizationFilter</filter-name>
