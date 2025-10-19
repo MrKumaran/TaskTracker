@@ -10,3 +10,5 @@ A place for me to save docs
 [baeldung JSP guide](https://www.baeldung.com/jsp#forwarding)
 
 [MDN web docs](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations)
+
+[Tomcat security](https://tomcat.apache.org/tomcat-9.0-doc/security-howto.html)
