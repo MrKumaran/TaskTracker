@@ -2,8 +2,8 @@ package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
 import in.project.tasktracker.Core.EntityBuilder;
-import in.project.tasktracker.Model.User.User;
 import in.project.tasktracker.Model.User.UserAuthReturn;
+import in.project.tasktracker.Model.User.UserRegisterDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
@@ -64,21 +64,21 @@ public class AuthenticationController extends HttpServlet {
             return null;
         }
 
-        User user = EntityBuilder.userObjectBuilder(request, null);
-        if (user == null) {
+        UserRegisterDto userRegisterDto = EntityBuilder.userRegisterDtoBuilder(request);
+        if (userRegisterDto == null) {
             request.setAttribute("error", "PasswordNotOK");
             request.getRequestDispatcher("View/signup.jsp").forward(request, response);
             return null;
         }
 
-        boolean isSignUp = dbManager.signupViaMail(user);
+        boolean isSignUp = dbManager.signupViaMail(userRegisterDto);
         if (!isSignUp) {
             request.setAttribute("error", "errorCreatingAccount");
             request.getRequestDispatcher("View/signup.jsp").forward(request, response);
             return null;
         }
 
-        return new UserAuthReturn(user.getUserId(), user.getUserName());
+        return new UserAuthReturn(userRegisterDto.getUserId(), userRegisterDto.getUserName());
     }
 
     private UserAuthReturn loginHandler(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
