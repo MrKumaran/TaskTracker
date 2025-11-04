@@ -16,7 +16,7 @@ public class Task {
     public Task(Builder builder){
         this.userId = builder.userId;
         this.taskId = builder.taskId;
-        this.taskTitle = builder().taskTitle;;
+        this.taskTitle = builder().taskTitle;
         this.due = builder.due;
         this.isDone = builder.isDone;
         this.completedAt = builder.completedAt;
