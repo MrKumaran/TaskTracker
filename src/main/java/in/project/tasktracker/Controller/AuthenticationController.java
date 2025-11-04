@@ -9,7 +9,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.util.Map;
 
 // This servlet is responsible for authentication signing up new user, login in existing user
 @WebServlet(name = "AuthenticationController", value = {"/landing", "/login", "/signup"})
