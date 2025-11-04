@@ -2,7 +2,8 @@ package in.project.tasktracker.Core;
 
 import in.project.tasktracker.Enums.Task.TaskBuilderEnum;
 import in.project.tasktracker.Model.Task.Task;
-import in.project.tasktracker.Model.User.User;
+import in.project.tasktracker.Model.User.AuthEntity;
+import in.project.tasktracker.Model.User.UserRegisterDto;
 import jakarta.servlet.http.HttpServletRequest;
 import org.json.JSONObject;
 
@@ -57,30 +58,38 @@ public class EntityBuilder {
                 .build();
     }
 
-    public static User userObjectBuilder(HttpServletRequest request, String userId) { // if null is returned then password not valid
+    public static UserRegisterDto userRegisterDtoBuilder(HttpServletRequest request) {
+        return UserRegisterDto.builder()
+                .setMail(request.getParameter("mail"))
+                .setPassword(request.getParameter("password"))
+                .setUserName(request.getParameter("userName"))
+                .build();
+    }
+
+    public static AuthEntity userObjectBuilder(HttpServletRequest request, String userId) { // if null is returned then password not valid
         Authentication authentication = new Authentication();
-        User user = new User();
-        user.setUserId((userId == null || userId.isEmpty())?authentication.generateUUID():userId);
+        AuthEntity authEntity = new AuthEntity();
+
+        authEntity.setUserId((userId == null || userId.isEmpty())?authentication.generateUUID():userId);
         String password = request.getParameter("password");
         boolean isPasswordPresent = !(password == null || password.isEmpty()); // Also using for profile update so something password will not be provided
         if(isPasswordPresent){
             boolean passCheck = authentication.passwordStrengthCheck(password);
             if (!passCheck) return null;
         }
-        user.setMail(request.getParameter("mail"));
-        user.setUserName(request.getParameter("userName"));
-        user.setAvatarURL(request.getParameter("avatarUrl"));
-        user.setSalt(
+        authEntity.setMail(request.getParameter("mail"));
+//        authEntity.setUserName(request.getParameter("userName"));
+        authEntity.setSalt(
                 (isPasswordPresent)?
                         authentication.generateSalt():
                         null
                 );
-        user.setPassword(
+        authEntity.setPassword(
                 (isPasswordPresent)?
-                        authentication.passwordHash(password, user.getSalt())
+                        authentication.passwordHash(password, authEntity.getSalt())
                         :null
         );
-        return user;
+        return authEntity;
     }
 
     private static String requestToStringBuilder(HttpServletRequest request) {
