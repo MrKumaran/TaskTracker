@@ -1,7 +1,7 @@
 package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
-import in.project.tasktracker.Core.ObjectBuilder;
+import in.project.tasktracker.Core.EntityBuilder;
 import in.project.tasktracker.Model.User.User;
 import in.project.tasktracker.Model.User.UserAuthReturn;
 import jakarta.servlet.ServletException;
@@ -64,7 +64,7 @@ public class AuthenticationController extends HttpServlet {
             return null;
         }
 
-        User user = ObjectBuilder.userObjectBuilder(request, null);
+        User user = EntityBuilder.userObjectBuilder(request, null);
         if (user == null) {
             request.setAttribute("error", "PasswordNotOK");
             request.getRequestDispatcher("View/signup.jsp").forward(request, response);
