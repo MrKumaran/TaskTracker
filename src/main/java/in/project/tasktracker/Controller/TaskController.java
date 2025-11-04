@@ -1,10 +1,11 @@
 package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
-import in.project.tasktracker.Core.ObjectBuilder;
-import in.project.tasktracker.Model.Profile;
-import in.project.tasktracker.Model.Task;
-import in.project.tasktracker.Model.UserTasks;
+import in.project.tasktracker.Core.EntityBuilder;
+import in.project.tasktracker.Enums.Task.TaskBuilderEnum;
+import in.project.tasktracker.Model.Profile.Profile;
+import in.project.tasktracker.Model.Task.Task;
+import in.project.tasktracker.Model.Task.UserTasks;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -71,7 +72,7 @@ public class TaskController extends HttpServlet {
         response.setContentType("application/json"); // This is here to send response to JS, so that it will alert user about operation
         switch (path) {
             case "/newTask" -> {
-                Task task = ObjectBuilder.taskObjectBuilder(request, profile.getUserId());
+                Task task = EntityBuilder.taskEntityBuilder(request, profile.getUserId(), TaskBuilderEnum.BUILD_TASK);
                 if (task != null) isOperationSuccess = dbManager.upsertTask(task);
                 session.setAttribute("operation", "newTaskAdded");
             }
@@ -92,7 +93,7 @@ public class TaskController extends HttpServlet {
                 session.setAttribute("operation", "deletedTask");
             }
             case "/editTask" -> {
-                Task task = ObjectBuilder.taskObjectBuilder(request, profile.getUserId());
+                Task task = EntityBuilder.taskEntityBuilder(request, profile.getUserId(), TaskBuilderEnum.EDIT_TASK);
                 session.setAttribute("operation", "taskUpdate");
                 if(task != null) isOperationSuccess = dbManager.upsertTask(task);
                 session.setAttribute("isOperationSuccess", isOperationSuccess);
