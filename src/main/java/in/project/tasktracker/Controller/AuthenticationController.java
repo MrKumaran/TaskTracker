@@ -2,15 +2,14 @@ package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
 import in.project.tasktracker.Core.ObjectBuilder;
-import in.project.tasktracker.Model.User;
+import in.project.tasktracker.Model.User.User;
+import in.project.tasktracker.Model.User.UserAuthReturn;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 // This servlet is responsible for authentication signing up new user, login in existing user
 @WebServlet(name = "AuthenticationController", value = {"/landing", "/login", "/signup"})
@@ -35,14 +34,26 @@ public class AuthenticationController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String path = request.getServletPath();
+        UserAuthReturn user = null;
+
         if (path.equals("/login")) {
-            loginHandler(request, response);
+            user = loginHandler(request, response);
         } else if (path.equals("/signup")) {
-           signupHandler(request, response);
+           user = signupHandler(request, response);
         }
+
+        if(user == null) return;
+
+        HttpSession session = request.getSession();
+        session.setMaxInactiveInterval(600);
+        session.setAttribute("user", user.getId());
+        session.setAttribute("operation", "greets");
+        session.setAttribute("isOperationSuccess", user.getName());
+
+        response.sendRedirect("/");
     }
 
-    private void signupHandler(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private UserAuthReturn signupHandler(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO:
         //  just here as placeholder for now
         //  later it will be replaced by email verification
@@ -51,45 +62,38 @@ public class AuthenticationController extends HttpServlet {
         boolean isPresent = dbManager.isNewMail(mail);
         if (isPresent) {
             response.sendRedirect("/login");
-            return;
+            return null;
         }
+
         User user = ObjectBuilder.userObjectBuilder(request, null);
         if (user == null) {
             request.setAttribute("error", "PasswordNotOK");
             request.getRequestDispatcher("View/signup.jsp").forward(request, response);
-            return;
+            return null;
         }
+
         boolean isSignUp = dbManager.signupViaMail(user);
-        if (isSignUp) {
-            HttpSession session = request.getSession();
-            session.setMaxInactiveInterval(600);
-            session.setAttribute("user", user.getUserId());
-            session.setAttribute("operation", "greets");
-            session.setAttribute("isOperationSuccess", user.getUserName());
-            response.sendRedirect("/");
-        }
-        else {
+        if (!isSignUp) {
             request.setAttribute("error", "errorCreatingAccount");
             request.getRequestDispatcher("View/signup.jsp").forward(request, response);
+            return null;
         }
+
+        return new UserAuthReturn(user.getUserId(), user.getUserName());
     }
 
-    private void loginHandler(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private UserAuthReturn loginHandler(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
          String userId = dbManager.loginViaMail(
                  request.getParameter("mail"),
                  request.getParameter("password")
          );
-         if (userId != null){
-             HttpSession session = request.getSession();
-             session.setMaxInactiveInterval(600);
-             session.setAttribute("user", userId);
-             session.setAttribute("operation", "greets");
-             session.setAttribute("isOperationSuccess", dbManager.retrieveProfile(userId).getUserName());
-             response.sendRedirect("/");
+
+         if (userId == null){
+             request.setAttribute("error", "credentialsNotMatch");
+             request.getRequestDispatcher("View/login.jsp").forward(request, response);
+             return null;
          }
-        else {
-            request.setAttribute("error", "credentialsNotMatch");
-            request.getRequestDispatcher("View/login.jsp").forward(request, response);
-        }
+
+        return new UserAuthReturn(userId, dbManager.retrieveProfile(userId).getUserName());
     }
 }
