@@ -1,9 +1,11 @@
 package in.project.tasktracker.Core;
 
-import in.project.tasktracker.Model.Profile;
-import in.project.tasktracker.Model.Task;
-import in.project.tasktracker.Model.User;
-import in.project.tasktracker.Model.UserTasks;
+import in.project.tasktracker.Model.Profile.Profile;
+import in.project.tasktracker.Model.Task.Task;
+import in.project.tasktracker.Model.User.AuthEntity;
+import in.project.tasktracker.Model.Task.UserTasks;
+import in.project.tasktracker.Model.User.UserRegisterDto;
+
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 import java.sql.*;
@@ -48,7 +50,7 @@ public class DBManager {
     }
 
     // updating profile information
-    public boolean updateProfile(User editProfileObject) {
+    public boolean updateProfile(AuthEntity editProfileObject) {
         boolean isPasswordPresent = !(editProfileObject.getPassword() == null || editProfileObject.getPassword().isEmpty());
         String query = "UPDATE authentication SET password = ?, salt = ? WHERE user_id = ?";
         if(isPasswordPresent) {
@@ -69,7 +71,7 @@ public class DBManager {
         }
         query = "UPDATE profile SET user_name = ? WHERE user_id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setString(1, editProfileObject.getUserName());
+            ps.setString(1, null);
             ps.setString(2, editProfileObject.getUserId());
             ps.executeUpdate();
             con.commit();
@@ -251,13 +253,13 @@ public class DBManager {
         }
     }
 
-    public boolean signupViaMail(User user) {
+    public boolean signupViaMail(UserRegisterDto userRegisterDto) {
         String query = "INSERT INTO authentication(user_id, mail, password, salt) Values (?,?,?,?)";
         try(PreparedStatement ps = con.prepareStatement(query)){
-            ps.setString(1, user.getUserId());
-            ps.setString(2, user.getMail());
-            ps.setString(3, user.getPassword());
-            ps.setString(4, user.getSalt());
+            ps.setString(1, userRegisterDto.getUserId());
+            ps.setString(2, userRegisterDto.getMail());
+            ps.setString(3, userRegisterDto.getPassword());
+            ps.setString(4, userRegisterDto.getSalt());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -266,9 +268,9 @@ public class DBManager {
         }
         query = "INSERT INTO profile(user_id, user_name, avatar_url) Values (?,?,?)";
         try(PreparedStatement ps = con.prepareStatement(query)){
-            ps.setString(1, user.getUserId());
-            ps.setString(2, user.getUserName());
-            ps.setString(3, user.getAvatarURL());
+            ps.setString(1, userRegisterDto.getUserId());
+            ps.setString(2, userRegisterDto.getUserName());
+            ps.setString(3, null);
             ps.executeUpdate();
             con.commit();
         } catch (SQLException e) {
