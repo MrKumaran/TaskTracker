@@ -9,12 +9,12 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 
 // This servlet is responsible for maintaining images(profile images)
-@WebServlet(name = "ProfileImageUpdater", value = {
+@WebServlet(name = "ProfileImageUpdaterController", value = {
         "/upload-profile-pic",
         "/delete-profile-pic"
 })
 @MultipartConfig
-public class ProfileImageUpdater extends HttpServlet {
+public class ProfileImageUpdaterController extends HttpServlet {
     private ImageManager imageManager;
     private DBManager dbManager;
 
