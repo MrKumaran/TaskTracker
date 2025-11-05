@@ -2,6 +2,7 @@ package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
 import in.project.tasktracker.Core.EntityBuilder;
+import in.project.tasktracker.Enums.Auth.AuthEnum;
 import in.project.tasktracker.Enums.Error.ErrorEnum;
 import in.project.tasktracker.Model.User.UserAuthReturn;
 import in.project.tasktracker.Model.User.UserRegisterDto;
@@ -89,7 +90,7 @@ public class AuthenticationController extends HttpServlet {
          );
 
          if (userId == null){
-             request.setAttribute("error", ErrorEnum.CREDENTIALS_NOT_MATCH);
+             request.setAttribute("error", AuthEnum.CREDENTIALS_NOT_MATCH);
              request.getRequestDispatcher("View/login.jsp").forward(request, response);
              return null;
          }
