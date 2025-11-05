@@ -3,6 +3,7 @@ package in.project.tasktracker.Controller;
 import in.project.tasktracker.Core.DBManager;
 import in.project.tasktracker.Core.EntityBuilder;
 import in.project.tasktracker.Enums.Task.TaskBuilderEnum;
+import in.project.tasktracker.Enums.Task.TaskEnum;
 import in.project.tasktracker.Model.Profile.Profile;
 import in.project.tasktracker.Model.Task.Task;
 import in.project.tasktracker.Model.Task.UserTasks;
@@ -19,7 +20,6 @@ import java.io.IOException;
 @WebServlet(name = "TaskController", value = {
         "/",
         "/newTask",
-        "/updateTaskStatus",
         "/deleteTask",
         "/editTask"
 })
@@ -68,32 +68,21 @@ public class TaskController extends HttpServlet {
         HttpSession session = request.getSession(false);
         String path = request.getServletPath();
         boolean isOperationSuccess = false;
-        Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
+        String userId = session.getAttribute("user").toString();
         response.setContentType("application/json"); // This is here to send response to JS, so that it will alert user about operation
+
         switch (path) {
             case "/newTask" -> {
-                Task task = EntityBuilder.taskEntityBuilder(request, profile.getUserId(), TaskBuilderEnum.BUILD_TASK);
+                Task task = EntityBuilder.taskEntityBuilder(request, userId, TaskBuilderEnum.BUILD_TASK);
                 if (task != null) isOperationSuccess = dbManager.upsertTask(task);
                 session.setAttribute("operation", "newTaskAdded");
             }
-            case "/updateTaskStatus" -> {
-                try {
-                    isOperationSuccess = dbManager.updateTaskStatus(
-                            profile.getUserId(),
-                            request.getParameter("taskId"),
-                            Boolean.parseBoolean(request.getParameter("isDone"))
-                    );
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                session.setAttribute("operation", "updatedTaskStatus");
-            }
             case "/deleteTask" -> {
-                isOperationSuccess = dbManager.deleteTask(profile.getUserId(), request.getParameter("taskId"));
+                isOperationSuccess = dbManager.deleteTask(userId, request.getParameter("taskId"));
                 session.setAttribute("operation", "deletedTask");
             }
             case "/editTask" -> {
-                Task task = EntityBuilder.taskEntityBuilder(request, profile.getUserId(), TaskBuilderEnum.EDIT_TASK);
+                Task task = EntityBuilder.taskEntityBuilder(request, userId, TaskBuilderEnum.EDIT_TASK);
                 session.setAttribute("operation", "taskUpdate");
                 if(task != null) isOperationSuccess = dbManager.upsertTask(task);
                 session.setAttribute("isOperationSuccess", isOperationSuccess);
