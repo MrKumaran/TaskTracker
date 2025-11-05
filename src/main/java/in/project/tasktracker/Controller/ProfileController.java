@@ -12,15 +12,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
-// This servlet is responsible for profile related operation except profile image -> it was managed by API/ProfileImageUpdater.java
+// This servlet is responsible for profile related operation except profile image -> it was managed by ProfileImageUpdaterController.java
 @WebServlet(name = "ProfileController",
         value = {
                 "/profile",
                 "/logout",
                 "/edit-profile",
                 "/updateProfile",
-                "/deleteAccount",
-                "/update-username"
+                "/deleteAccount"
 })
 public class ProfileController extends HttpServlet {
     DBManager dbManager;
@@ -46,7 +45,6 @@ public class ProfileController extends HttpServlet {
             }
             case "/edit-profile" -> {
                 Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
-                System.out.println(profile.getUserName());
                 request.setAttribute("user", profile);
                 request.getRequestDispatcher("View/profileEdit.jsp").forward(request, response);
             }
