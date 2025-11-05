@@ -21,7 +21,12 @@ import java.io.IOException;
         }
 )
 public class UpdateController extends HttpServlet {
-    private final DBManager dbManager = DBManager.getInstance();
+    private DBManager dbManager;
+
+    @Override
+    public void init() {
+        this.dbManager = DBManager.getInstance();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
