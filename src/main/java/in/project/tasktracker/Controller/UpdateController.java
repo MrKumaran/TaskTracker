@@ -80,7 +80,7 @@ public class UpdateController extends HttpServlet {
                         }
                         isOperationSuccess = operation.equals(AuthEnum.PASSWORD_UPDATED);
                     }
-                    else operation = ErrorEnum.PASSWORD_NOT_COMPLEX;
+                    else operation = AuthEnum.PASSWORD_NOT_COMPLEX;
                 }
             }
 

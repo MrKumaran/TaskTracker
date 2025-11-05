@@ -68,7 +68,7 @@ public class AuthenticationController extends HttpServlet {
 
         UserRegisterDto userRegisterDto = EntityBuilder.userRegisterDtoBuilder(request);
         if (userRegisterDto == null) {
-            request.setAttribute("error", ErrorEnum.PASSWORD_NOT_COMPLEX);
+            request.setAttribute("error", AuthEnum.PASSWORD_NOT_COMPLEX);
             request.getRequestDispatcher("View/signup.jsp").forward(request, response);
             return null;
         }
