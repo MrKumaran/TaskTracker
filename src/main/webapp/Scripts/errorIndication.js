@@ -7,16 +7,17 @@ switch (errorMessage) {
         errorIndicator.innerText = "Passwords didn't match"
         break
 
-    case "errorCreatingAccount":
+    case "DB_ERROR":
         errorIndicator.style.display = 'block'
-        errorIndicator.innerText = "Error Creating Account try again later. .. ..."
+        errorIndicator.innerText = "Error occurred try again later. .. ..."
         break
 
-    case "credentialsNotMatch":
+    case "CREDENTIALS_NOT_MATCH":
         errorIndicator.style.display = 'block'
         errorIndicator.innerText = "Entered credentials didn't match"
         break
-    case "PasswordNotOK":
+
+    case "PASSWORD_NOT_COMPLEX":
         errorIndicator.style.display = 'block'
         errorIndicator.innerText = "Password is not complex enough\n" +
             "Password should consist of\n" +

@@ -2,6 +2,7 @@ package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
 import in.project.tasktracker.Core.EntityBuilder;
+import in.project.tasktracker.Enums.Error.ErrorEnum;
 import in.project.tasktracker.Model.User.UserAuthReturn;
 import in.project.tasktracker.Model.User.UserRegisterDto;
 import jakarta.servlet.ServletException;
@@ -66,14 +67,14 @@ public class AuthenticationController extends HttpServlet {
 
         UserRegisterDto userRegisterDto = EntityBuilder.userRegisterDtoBuilder(request);
         if (userRegisterDto == null) {
-            request.setAttribute("error", "PasswordNotOK");
+            request.setAttribute("error", ErrorEnum.PASSWORD_NOT_COMPLEX);
             request.getRequestDispatcher("View/signup.jsp").forward(request, response);
             return null;
         }
 
         boolean isSignUp = dbManager.signupViaMail(userRegisterDto);
         if (!isSignUp) {
-            request.setAttribute("error", "errorCreatingAccount");
+            request.setAttribute("error", ErrorEnum.DB_ERROR);
             request.getRequestDispatcher("View/signup.jsp").forward(request, response);
             return null;
         }
@@ -88,7 +89,7 @@ public class AuthenticationController extends HttpServlet {
          );
 
          if (userId == null){
-             request.setAttribute("error", "credentialsNotMatch");
+             request.setAttribute("error", ErrorEnum.CREDENTIALS_NOT_MATCH);
              request.getRequestDispatcher("View/login.jsp").forward(request, response);
              return null;
          }
