@@ -1,9 +1,9 @@
 package in.project.tasktracker.Controller;
 
 import in.project.tasktracker.Core.DBManager;
-import in.project.tasktracker.Core.ObjectBuilder;
-import in.project.tasktracker.Model.Profile;
-import in.project.tasktracker.Model.User;
+import in.project.tasktracker.Core.EntityBuilder;
+import in.project.tasktracker.Model.Profile.Profile;
+import in.project.tasktracker.Model.Profile.ProfileUpdateDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,7 +21,8 @@ import java.io.IOException;
                 "/logout",
                 "/edit-profile",
                 "/updateProfile",
-                "/deleteAccount"
+                "/deleteAccount",
+                "/update-username"
 })
 public class ProfileController extends HttpServlet {
     DBManager dbManager;
@@ -47,6 +48,7 @@ public class ProfileController extends HttpServlet {
             }
             case "/edit-profile" -> {
                 Profile profile = dbManager.retrieveProfile((String) session.getAttribute("user"));
+                System.out.println(profile.getUserName());
                 request.setAttribute("user", profile);
                 request.getRequestDispatcher("View/profileEdit.jsp").forward(request, response);
             }
@@ -62,16 +64,9 @@ public class ProfileController extends HttpServlet {
         if(path.equals("/updateProfile")) {
             currPswrd = request.getParameter("current-password");
         } else if(path.equals("/deleteAccount")) {
-            StringBuilder sb = new StringBuilder();
-            try (BufferedReader reader = request.getReader()) {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            currPswrd =  sb.toString().split(":")[1];
+            String jsonString = EntityBuilder.requestToStringBuilder(request);
+            if (jsonString == null) return; // TODO send error
+            currPswrd =  jsonString.split(":")[1];
             currPswrd = currPswrd.substring(1, currPswrd.length()-2);
         }
         boolean isAuthenticated = dbManager.loginViaMail(
@@ -84,14 +79,14 @@ public class ProfileController extends HttpServlet {
             return;
         }
         if(path.equals("/updateProfile")) {
-            User userProfile = ObjectBuilder.userObjectBuilder(request, (String) session.getAttribute("user"));
-            if (userProfile == null) { // if user object is null then password not valid
+            ProfileUpdateDto profileUpdateDtoProfile = EntityBuilder.userObjectBuilder(request, (String) session.getAttribute("user"));
+            if (profileUpdateDtoProfile == null) { // if user object is null then password not valid
                 session.setAttribute("operation", "profileUpdated:password");
                 session.setAttribute("isOperationSuccess", false);
                 response.sendRedirect("/");
                 return;
             }
-            boolean isOperationSuccess = dbManager.updateProfile(userProfile);
+            boolean isOperationSuccess = dbManager.updateProfile(profileUpdateDtoProfile);
             session.setAttribute("operation", "profileUpdated");
             session.setAttribute("isOperationSuccess", isOperationSuccess);
             response.sendRedirect("/");
