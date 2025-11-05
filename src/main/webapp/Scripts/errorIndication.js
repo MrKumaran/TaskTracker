@@ -2,7 +2,7 @@ const errorIndicator = document.getElementById("errorDiv")
 const errorMessage = errorIndicator.innerText
 
 switch (errorMessage) {
-    case "passwordNotMatch":
+    case "PASSWORD_NOT_MATCH":
         errorIndicator.style.display = 'block'
         errorIndicator.innerText = "Passwords didn't match"
         break
