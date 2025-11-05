@@ -1,6 +1,5 @@
 package in.project.tasktracker.Model.User;
 
-import in.project.tasktracker.Core.Authentication;
 
 public class PasswordUpdateDto {
     private String userId;
