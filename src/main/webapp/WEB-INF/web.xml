@@ -29,7 +29,6 @@
         <web-resource-collection>
             <web-resource-name>Protected Area</web-resource-name>
             <url-pattern>/delete-profile-pic</url-pattern>
-            <url-pattern>/updateTaskStatus</url-pattern>
             <url-pattern>/deleteTask</url-pattern>
             <url-pattern>/editTask</url-pattern>
             <url-pattern>/upload-profile-pic</url-pattern>
@@ -61,7 +60,6 @@
         <filter-name>AuthorizationFilter</filter-name>
         <url-pattern>/</url-pattern>
         <url-pattern>/newTask</url-pattern>
-        <url-pattern>/updateTaskStatus</url-pattern>
         <url-pattern>/deleteTask</url-pattern>
         <url-pattern>/profile</url-pattern>
         <url-pattern>/logout</url-pattern>
