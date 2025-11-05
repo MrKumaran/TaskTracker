@@ -9,7 +9,8 @@
 <html>
 <head>
     <title>Tasks</title>
-    <script type="module" src="../Scripts/taskPage.js" defer></script>
+    <script src="${pageContext.request.contextPath}/Scripts/notificationCaller.js" type="module" defer></script>
+    <script src="${pageContext.request.contextPath}/Scripts/taskPage.js" type="module" defer></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/Styles/taskPage.css" type="text/css">
 </head>
 <body>
