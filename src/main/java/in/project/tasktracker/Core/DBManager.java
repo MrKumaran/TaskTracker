@@ -2,6 +2,7 @@ package in.project.tasktracker.Core;
 
 import in.project.tasktracker.Enums.Auth.AuthEnum;
 import in.project.tasktracker.Enums.Profile.ProfileEnum;
+import in.project.tasktracker.Enums.Task.TaskEnum;
 import in.project.tasktracker.Model.Profile.Profile;
 import in.project.tasktracker.Model.Profile.ProfileUsernameUpdateDto;
 import in.project.tasktracker.Model.Task.Task;
@@ -164,20 +165,21 @@ public class DBManager {
         return true;
     }
 
-    // updating task status
-    public boolean updateTaskStatus(String userId, String taskId, boolean isDone) {
+    // updating task status - Once done can't change status
+    public TaskEnum updateTaskStatus(String userId, String taskId) {
         String query = "UPDATE task SET isDone = ?, completedAt = ? WHERE user_Id = ? AND task_Id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setBoolean(1, isDone);
-            ps.setTimestamp(2, (isDone)?Timestamp.valueOf(LocalDateTime.now()): null);
+            ps.setBoolean(1, true);
+            ps.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             ps.setString(3, userId);
             ps.setString(4, taskId);
             boolean isUpdated = ps.executeUpdate() == 1;
             con.commit();
-            return isUpdated;
+            return isUpdated?TaskEnum.TASK_STATUS_UPDATED
+                    :TaskEnum.TASK_NOT_FOUND;
         } catch (SQLException e) {
             rollBack(e);
-            return false;
+            return TaskEnum.ERROR_OCCURRED;
         }
     }
 
@@ -352,7 +354,7 @@ public class DBManager {
                 return password.equals(
                         new Authentication().passwordHash(oldPassword, salt))
                 ? AuthEnum.PASSWORD_MATCH:
-                        AuthEnum.PASSWORD_NOT_MATCH;
+                        AuthEnum.CREDENTIALS_NOT_MATCH;
 
             } else return AuthEnum.USER_NOT_FOUND;
         } catch (SQLException e) {
@@ -370,13 +372,14 @@ public class DBManager {
             ps.setString(1, passwordUpdateDto.getPassword());
             ps.setString(2, passwordUpdateDto.getSalt());
             ps.setString(3, passwordUpdateDto.getUserId());
-            ps.executeUpdate();
+            boolean updated = ps.executeUpdate() == 1;
             con.commit();
+            return updated?AuthEnum.PASSWORD_UPDATED
+                    :AuthEnum.USER_NOT_FOUND;
         } catch (SQLException e){
             rollBack(e);
             return AuthEnum.ERROR_OCCURRED;
         }
-        return AuthEnum.PASSWORD_UPDATED;
     }
 
     // common method to rollback db if error occurs
