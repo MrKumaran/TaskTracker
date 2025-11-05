@@ -16,6 +16,67 @@ import java.time.LocalDateTime;
 // It builds object from request
 public class EntityBuilder {
 
+    public static UserRegisterDto userRegisterDtoBuilder(HttpServletRequest request) {
+        // If password not strong return null. Inside builder logic
+        return UserRegisterDto.builder()
+                .setMail(request.getParameter("mail"))
+                .setPassword(request.getParameter("password"))
+                .setUserName(request.getParameter("userName"))
+                .build();
+    }
+
+    // If password is failed password strength check it return null
+    public static PasswordUpdateDto passwordUpdateDtoBuilder(HttpServletRequest request, String userId) {
+        PasswordUpdateDto passwordUpdateDto = new PasswordUpdateDto();
+        Authentication authentication = new Authentication();
+
+        String password = request.getParameter("password");
+        if(!authentication.passwordStrengthCheck(password)) return null;
+        passwordUpdateDto.setUserId(userId);
+        passwordUpdateDto.setSalt(authentication.generateSalt());
+        passwordUpdateDto.setOldPassword(request.getParameter("current-password"));
+        passwordUpdateDto.setPassword(
+                authentication.passwordHash(
+                        password,passwordUpdateDto.getSalt()
+                )
+        );
+
+        return passwordUpdateDto;
+    }
+
+    // Deprecated
+    public static ProfileUpdateDto userObjectBuilder(HttpServletRequest request, String userId) { // if null is returned then password not valid
+        Authentication authentication = new Authentication();
+        ProfileUpdateDto profileUpdateDto = new ProfileUpdateDto();
+
+        profileUpdateDto.setUserId((userId == null || userId.isEmpty())?authentication.generateUUID():userId);
+        String password = request.getParameter("password");
+        boolean isPasswordPresent = !(password == null || password.isEmpty()); // Also using for profile update so something password will not be provided
+        if(isPasswordPresent){
+            boolean passCheck = authentication.passwordStrengthCheck(password);
+            if (!passCheck) return null;
+        }
+//        authEntity.setUserName(request.getParameter("userName"));
+        profileUpdateDto.setSalt(
+                (isPasswordPresent)?
+                        authentication.generateSalt():
+                        null
+        );
+        profileUpdateDto.setPassword(
+                (isPasswordPresent)?
+                        authentication.passwordHash(password, profileUpdateDto.getSalt())
+                        :null
+        );
+        return profileUpdateDto;
+    }
+
+    public static ProfileUsernameUpdateDto profileUsernameUpdateDtoBuilder(HttpServletRequest request, String userId) {
+        ProfileUsernameUpdateDto profileUsernameUpdateDto = new ProfileUsernameUpdateDto();
+        profileUsernameUpdateDto.setUserId(userId);
+        profileUsernameUpdateDto.setUserName(request.getParameter("userName"));
+        return profileUsernameUpdateDto;
+    }
+
     // Task related builders may undergo further changes
     public static Task taskEntityBuilder(HttpServletRequest request, String userId, TaskBuilderEnum taskBuilderEnum) {
         String jsonString = requestToStringBuilder(request);
@@ -37,7 +98,7 @@ public class EntityBuilder {
         return null;
     }
 
-    public static Task newTaskBuilder(JSONObject requestJson, String userId,  LocalDateTime due) {
+    private static Task newTaskBuilder(JSONObject requestJson, String userId,  LocalDateTime due) {
         return Task.builder()
                 .setUserId(userId)
                 .setTaskId(new Authentication().generateUUID())
@@ -48,7 +109,7 @@ public class EntityBuilder {
                 .build();
     }
 
-    public static Task modifyTaskBuilder(JSONObject requestJson, String userId, LocalDateTime due) {
+    private static Task modifyTaskBuilder(JSONObject requestJson, String userId, LocalDateTime due) {
         return Task.builder()
                 .setUserId(userId)
                 .setTaskId(requestJson.getString("taskId"))
@@ -57,67 +118,6 @@ public class EntityBuilder {
                 .setDone(false)
                 .setCompletedAt(null)
                 .build();
-    }
-
-    public static UserRegisterDto userRegisterDtoBuilder(HttpServletRequest request) {
-        // If password not strong return null. Inside builder logic
-        return UserRegisterDto.builder()
-                .setMail(request.getParameter("mail"))
-                .setPassword(request.getParameter("password"))
-                .setUserName(request.getParameter("userName"))
-                .build();
-    }
-
-    // Deprecated
-    public static ProfileUpdateDto userObjectBuilder(HttpServletRequest request, String userId) { // if null is returned then password not valid
-        Authentication authentication = new Authentication();
-        ProfileUpdateDto profileUpdateDto = new ProfileUpdateDto();
-
-        profileUpdateDto.setUserId((userId == null || userId.isEmpty())?authentication.generateUUID():userId);
-        String password = request.getParameter("password");
-        boolean isPasswordPresent = !(password == null || password.isEmpty()); // Also using for profile update so something password will not be provided
-        if(isPasswordPresent){
-            boolean passCheck = authentication.passwordStrengthCheck(password);
-            if (!passCheck) return null;
-        }
-//        authEntity.setUserName(request.getParameter("userName"));
-        profileUpdateDto.setSalt(
-                (isPasswordPresent)?
-                        authentication.generateSalt():
-                        null
-                );
-        profileUpdateDto.setPassword(
-                (isPasswordPresent)?
-                        authentication.passwordHash(password, profileUpdateDto.getSalt())
-                        :null
-        );
-        return profileUpdateDto;
-    }
-
-    public static ProfileUsernameUpdateDto profileUsernameUpdateDtoBuilder(HttpServletRequest request, String userId) {
-        ProfileUsernameUpdateDto profileUsernameUpdateDto = new ProfileUsernameUpdateDto();
-        profileUsernameUpdateDto.setUserId(userId);
-        profileUsernameUpdateDto.setUserName(request.getParameter("userName"));
-        return profileUsernameUpdateDto;
-    }
-
-    public static PasswordUpdateDto passwordUpdateDtoBuilder(HttpServletRequest request, String userId) {
-        PasswordUpdateDto passwordUpdateDto = new PasswordUpdateDto();
-        Authentication authentication = new Authentication();
-
-        String password = request.getParameter("password");
-        if(!authentication.passwordStrengthCheck(password)) return null;
-
-        passwordUpdateDto.setUserId(userId);
-        passwordUpdateDto.setSalt(authentication.generateSalt());
-        passwordUpdateDto.setOldPassword(request.getParameter("oldPassword"));
-        passwordUpdateDto.setPassword(
-                authentication.passwordHash(
-                        password,passwordUpdateDto.getSalt()
-                )
-        );
-
-        return passwordUpdateDto;
     }
 
     public static String requestToStringBuilder(HttpServletRequest request) {
