@@ -1,4 +1,4 @@
-package in.project.tasktracker.Model;
+package in.project.tasktracker.Model.Profile;
 
 public class Profile {
     private String userId;

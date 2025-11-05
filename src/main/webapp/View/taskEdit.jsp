@@ -1,4 +1,4 @@
-<%@ page import="in.project.tasktracker.Model.Task" %>
+<%@ page import="in.project.tasktracker.Model.Task.Task" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <!DOCTYPE html>

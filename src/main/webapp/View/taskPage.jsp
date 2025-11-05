@@ -1,9 +1,9 @@
-<%@ page import="in.project.tasktracker.Model.Task" %>
+<%@ page import="in.project.tasktracker.Model.Task.Task" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.time.LocalDateTime" %>
-<%@ page import="in.project.tasktracker.Model.Profile" %>
+<%@ page import="in.project.tasktracker.Model.Profile.Profile" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <!DOCTYPE html>
 <html>
