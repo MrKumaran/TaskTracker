@@ -31,7 +31,23 @@ switch (update[0]) {
         break
     case "TASK_NOT_FOUND":
         msg = "Task not found, Try reloading or relogging in"
-        break;
+        break
+    case "USERNAME_UPDATED":
+        msg = "User name updated"
+        break
+    case "PASSWORD_NOT_MATCH":
+        msg = "New password and Confirm password didn't Match"
+        break
+    case "PASSWORD_UPDATED":
+        msg = "Password Updated"
+        break
+    case "ERROR_OCCURRED":
+        msg = "Error occurred! Try again later"
+        break
+    case "PASSWORD_NOT_COMPLEX":
+        msg = "New password isn't complex enough"
+        break
+
 }
 
 if(update[0] !== "greets" && update[0] !== "null") {
