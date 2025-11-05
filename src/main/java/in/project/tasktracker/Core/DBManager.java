@@ -1,9 +1,13 @@
 package in.project.tasktracker.Core;
 
+import in.project.tasktracker.Enums.Auth.AuthEnum;
+import in.project.tasktracker.Enums.Profile.ProfileEnum;
 import in.project.tasktracker.Model.Profile.Profile;
+import in.project.tasktracker.Model.Profile.ProfileUsernameUpdateDto;
 import in.project.tasktracker.Model.Task.Task;
-import in.project.tasktracker.Model.User.AuthEntity;
+import in.project.tasktracker.Model.Profile.ProfileUpdateDto;
 import in.project.tasktracker.Model.Task.UserTasks;
+import in.project.tasktracker.Model.User.PasswordUpdateDto;
 import in.project.tasktracker.Model.User.UserRegisterDto;
 
 import javax.naming.InitialContext;
@@ -43,14 +47,13 @@ public class DBManager {
             con.commit();
             return isUpdated;
         } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
             return false;
         }
     }
 
     // updating profile information
-    public boolean updateProfile(AuthEntity editProfileObject) {
+    public boolean updateProfile(ProfileUpdateDto editProfileObject) {
         boolean isPasswordPresent = !(editProfileObject.getPassword() == null || editProfileObject.getPassword().isEmpty());
         String query = "UPDATE authentication SET password = ?, salt = ? WHERE user_id = ?";
         if(isPasswordPresent) {
@@ -60,12 +63,11 @@ public class DBManager {
                     ps.setString(3, editProfileObject.getUserId());
                 isPasswordPresent = ps.executeUpdate() == 1;
             } catch (SQLException e) {
-                e.printStackTrace();
-                rollBack();
+                rollBack(e);
                 return false;
             }
             if (!isPasswordPresent) {
-                rollBack();
+                rollBack(new SQLException("Password not updated"));
                 return false;
             }
         }
@@ -77,8 +79,7 @@ public class DBManager {
             con.commit();
             return true;
         } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
             return false;
         }
     }
@@ -93,28 +94,29 @@ public class DBManager {
             ps.setString(1, user_id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Task task = new Task();
-                task.setUserId(user_id);
-                task.setTaskId(rs.getString("task_id"));
-                task.setTaskTitle(rs.getString("task_title"));
-                task.setDue(
-                        LocalDateTime.parse(
-                                rs.getString("due").replace(" ", "T")
-                        )
-                );
-                task.setDone(rs.getBoolean("isDone"));
                 String completedAt = rs.getString("completedAt");
-                task.setCompletedAt( completedAt==null?null:
-                        LocalDateTime.parse(
-                            completedAt.replace(" ", "T")
+                Task task = Task.builder()
+                        .setUserId(user_id)
+                        .setTaskId(rs.getString("task_id"))
+                        .setTaskTitle(rs.getString("task_title"))
+                        .setDue(
+                                LocalDateTime.parse(
+                                        rs.getString("due").replace(" ", "T")
+                                )
                         )
-                );
+                        .setDone(rs.getBoolean("isDone"))
+                        .setCompletedAt(
+                                completedAt==null?null:
+                                        LocalDateTime.parse(
+                                                completedAt.replace(" ", "T")
+                                        )
+                        )
+                        .build();
                 tasks.add(task);
             }
             con.commit();
         }catch (SQLException e){
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
         }
 
         query = "SELECT COUNT(task_id) as Total_Count, SUM(isDone) as Total_Done_Count FROM task WHERE user_id = ?";
@@ -131,8 +133,7 @@ public class DBManager {
             }
             con.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
         }
         return userTasks;
     }
@@ -157,8 +158,7 @@ public class DBManager {
             ps.executeUpdate();
             con.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
             return false;
         }
         return true;
@@ -176,8 +176,7 @@ public class DBManager {
             con.commit();
             return isUpdated;
         } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
             return false;
         }
     }
@@ -192,37 +191,33 @@ public class DBManager {
             con.commit();
             return isDeleted;
         } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
             return false;
         }
     }
 
     // retrieve task
     public Task getTaskByID(String taskId, String userId){
-        Task task = new Task();
+        Task.Builder taskBuilder = Task.builder();
         String query = "SELECT task_title, due FROM task WHERE user_id = ? AND task_id = ?";
         try(PreparedStatement ps = con.prepareStatement(query)){
             ps.setString(1, userId);
             ps.setString(2, taskId);
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
-                task.setTaskTitle(
-                        rs.getString("task_title")
-                );
-                task.setTaskId(taskId);
-                task.setUserId(userId);
-                task.setDone(false);
-                task.setCompletedAt(null);
-                task.setDue(LocalDateTime.parse(
+                taskBuilder.setTaskTitle(rs.getString("task_title"))
+                .setTaskId(taskId)
+                .setUserId(userId)
+                .setDone(false)
+                .setCompletedAt(null)
+                .setDue(LocalDateTime.parse(
                         rs.getString("due").replace(" ", "T")
                 ));
             }
         } catch (SQLException e){
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
         }
-        return task;
+        return taskBuilder.build();
     }
 
     // Authentication related operations--
@@ -235,7 +230,7 @@ public class DBManager {
             salt = rs.next()?rs.getString("salt") : null;
             con.commit();
         } catch (SQLException e) {
-            e.printStackTrace();
+            rollBack(e);
             return null;
         }
         if (salt == null) return null;
@@ -248,7 +243,7 @@ public class DBManager {
             con.commit();
             return rs.next()?rs.getString("user_id"): null;
         } catch (SQLException e) {
-            e.printStackTrace();
+            rollBack(e);
             return null;
         }
     }
@@ -262,8 +257,7 @@ public class DBManager {
             ps.setString(4, userRegisterDto.getSalt());
             ps.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
             return false;
         }
         query = "INSERT INTO profile(user_id, user_name, avatar_url) Values (?,?,?)";
@@ -274,13 +268,7 @@ public class DBManager {
             ps.executeUpdate();
             con.commit();
         } catch (SQLException e) {
-            try {
-                con.rollback();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                return false;
-            }
-            e.printStackTrace();
+            rollBack(e);
             return false;
         }
         return true;
@@ -295,8 +283,7 @@ public class DBManager {
             con.commit();
             return rs.next();
         } catch (SQLException e) {
-            rollBack();
-            e.printStackTrace();
+            rollBack(e);
             return false;
         }
     }
@@ -319,8 +306,7 @@ public class DBManager {
             }
             con.commit();
         } catch (SQLException e) {
-            rollBack();
-            e.printStackTrace();
+            rollBack(e);
             return null;
         }
         return profile;
@@ -334,18 +320,72 @@ public class DBManager {
             ps.executeUpdate();
             con.commit();
         } catch (SQLException e){
-            e.printStackTrace();
-            rollBack();
+            rollBack(e);
         }
     }
 
+    public ProfileEnum updateUserName(ProfileUsernameUpdateDto profileUsernameUpdateDto) {
+        String query = "UPDATE profile SET user_name = ? WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, profileUsernameUpdateDto.getUserName());
+            ps.setString(2, profileUsernameUpdateDto.getUserId());
+            int recordUpdated = ps.executeUpdate();
+            con.commit();
+            if (recordUpdated == 1) return ProfileEnum.USERNAME_UPDATED;
+            else return ProfileEnum.PROFILE_NOT_FOUND;
+        } catch (SQLException e) {
+            rollBack(e);
+            return ProfileEnum.ERROR_OCCURRED;
+        }
+    }
+
+    public AuthEnum verifyPassword(String oldPassword, String userId) {
+        String query = "SELECT password, salt FROM authentication WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                String password = rs.getString("password");
+                String salt = rs.getString("salt");
+
+                return password.equals(
+                        new Authentication().passwordHash(oldPassword, salt))
+                ? AuthEnum.PASSWORD_MATCH:
+                        AuthEnum.PASSWORD_NOT_MATCH;
+
+            } else return AuthEnum.USER_NOT_FOUND;
+        } catch (SQLException e) {
+            rollBack(e);
+            return AuthEnum.ERROR_OCCURRED;
+        }
+    }
+
+    public AuthEnum changePassword(PasswordUpdateDto passwordUpdateDto) {
+        AuthEnum authEnum = verifyPassword(passwordUpdateDto.getOldPassword(), passwordUpdateDto.getUserId());
+        if (!authEnum.equals(AuthEnum.PASSWORD_MATCH)) return authEnum;
+
+        String query = "UPDATE authentication SET password = ?, salt = ? WHERE user_id = ?";
+        try(PreparedStatement ps = con.prepareStatement(query)) {
+            ps.setString(1, passwordUpdateDto.getPassword());
+            ps.setString(2, passwordUpdateDto.getSalt());
+            ps.setString(3, passwordUpdateDto.getUserId());
+            ps.executeUpdate();
+            con.commit();
+        } catch (SQLException e){
+            rollBack(e);
+            return AuthEnum.ERROR_OCCURRED;
+        }
+        return AuthEnum.PASSWORD_UPDATED;
+    }
+
     // common method to rollback db if error occurs
-    private void rollBack() {
+    private void rollBack(SQLException e) {
+        e.printStackTrace();
         try {
             con.rollback();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
-
 }
