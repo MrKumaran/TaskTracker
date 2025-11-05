@@ -10,8 +10,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
-import java.io.BufferedReader;
 import java.io.IOException;
 
 // This servlet is responsible for profile related operation except profile image -> it was managed by API/ProfileImageUpdater.java
