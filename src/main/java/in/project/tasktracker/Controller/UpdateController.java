@@ -6,6 +6,8 @@ import in.project.tasktracker.Enums.Auth.AuthEnum;
 import in.project.tasktracker.Enums.Error.ErrorEnum;
 import in.project.tasktracker.Enums.Profile.ProfileEnum;
 import in.project.tasktracker.Enums.Task.TaskEnum;
+import in.project.tasktracker.Model.Profile.ProfileDto;
+import in.project.tasktracker.Model.Profile.Profile;
 import in.project.tasktracker.Model.Profile.ProfileUsernameUpdateDto;
 import in.project.tasktracker.Model.User.PasswordUpdateDto;
 import jakarta.servlet.ServletException;
@@ -32,6 +34,20 @@ public class UpdateController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String endpoint = request.getPathInfo();
+        HttpSession session = request.getSession(false);
+        String userId = session.getAttribute("user").toString();
+
+        if (endpoint.equals("/password")) {
+            Profile profile = dbManager.retrieveProfile(userId);
+            ProfileDto profileDto = new ProfileDto(
+                    profile.getUserName(),
+                    profile.getAvatarURL()
+            );
+            request.setAttribute("profile", profileDto);
+            request.getRequestDispatcher("/View/updatePassword.jsp").forward(request, response);
+            return;
+        }
 
     }
 
