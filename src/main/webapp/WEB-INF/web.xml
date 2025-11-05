@@ -39,6 +39,7 @@
             <url-pattern>/edit-profile</url-pattern>
             <url-pattern>/updateProfile</url-pattern>
             <url-pattern>/deleteAccount</url-pattern>
+            <url-pattern>/update/*</url-pattern>
         </web-resource-collection>
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
@@ -69,6 +70,7 @@
         <url-pattern>/updateProfile</url-pattern>
         <url-pattern>/edit-profile</url-pattern>
         <url-pattern>/deleteAccount</url-pattern>
+        <url-pattern>/update/*</url-pattern>
     </filter-mapping>
 
     <filter>
