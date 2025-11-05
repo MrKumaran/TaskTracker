@@ -1,4 +1,4 @@
-package in.project.tasktracker.Model;
+package in.project.tasktracker.Model.Task;
 
 
 import java.util.ArrayList;
@@ -18,7 +18,6 @@ public class UserTasks {
     public List<Task> getTasks() {
         return tasks;
     }
-
 
     public long getTasksCount() {
         return tasksCount;
