@@ -59,6 +59,9 @@ switch (update[0]) {
     case "profileUpdated:password":
         msg = "Profile didn't updated:\n Password isn't complex Enough"
         break
+    case "TASK_NOT_FOUND":
+        msg = "Task not found, Try reloading or relogging in"
+        break;
 }
 
 if(update[0] !== "greets" && update[0] !== "null") {
@@ -89,7 +92,7 @@ function deleteTask(e) {
 function updateTaskStatus(e) {
     const taskId = e.target.value
     const status = e.target.checked
-    fetch('/updateTaskStatus', {
+    fetch('/update/taskStatus', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
