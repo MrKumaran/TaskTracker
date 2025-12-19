@@ -3,6 +3,7 @@
 ### why?
 Simply because I want to learn and try something using Tomcat, web developing, session maintaining, JWT, API, authentications.
 <sub>This contains many different ways to do same things, those are purely for me to have some learning</sub>
+Learned what i wanted to learn, test and experience done here moving next
 
 ### Tech stack used:
 **Programming language:** [Java openJDK 21](https://jdk.java.net/archive/)  
