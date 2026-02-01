@@ -15,7 +15,7 @@ public class UserRegisterDto {
         this.mail = builder.mail;
         this.password = builder.password;
         this.salt = builder.salt;
-        this.userName = builder().userName;
+        this.userName = builder.userName;
     }
 
     public static Builder builder(){
